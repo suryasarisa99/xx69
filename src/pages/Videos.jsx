@@ -5,11 +5,17 @@ import Section from "./Section";
 import Suggest from "../components/Suggest";
 
 export default function Videos({ setShowBars }) {
-  const { data, carouselsLoaded, dispatchLoaded } = useContext(DataContext);
+  const { gifs, setGifs, carouselsLoaded, dispatchLoaded, getAxios } =
+    useContext(DataContext);
   const [finalData, setFinalData] = useState([]);
   const navigate = useNavigate();
-  let savedData = data;
 
+  useEffect(() => {
+    console.log(gifs);
+    if (gifs.length == 0) {
+      getAxios("data/gifs", { id: "surya" }).then((res) => setGifs(res.data));
+    }
+  }, []);
   const howToLoadData = {
     initial: 2,
     load: 1,
@@ -35,7 +41,7 @@ export default function Videos({ setShowBars }) {
       {/* {data.length > 0 && ( */}
       <Section
         setShowBars={setShowBars}
-        data={data.filter((item) => item.images[0].endsWith(".gif"))}
+        data={gifs}
         setData={setFinalData}
         howToLoadData={howToLoadData}
         type_="videos"

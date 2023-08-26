@@ -18,6 +18,7 @@ export default function DataProvider({ children }) {
   const [profiles, setProfiles] = useState([]);
   const [saved, setSaved] = useState([]);
   const [savedIds, setSavedIds] = useState([]);
+  const [gifs, setGifs] = useState([]);
   // let [selectedData, setSelectedData] = useState()
   // localStorage.clear();
   // Toggle States
@@ -128,11 +129,6 @@ export default function DataProvider({ children }) {
           setSignin(true);
           setData(res.data.data);
           setProfiles(res.data.profiles);
-          getAxios("data/saved", { id: "surya" }, true).then((res) => {
-            console.log(res.data);
-            setSaved(res.data);
-            setSavedIds(res.data.map((s) => s._id));
-          });
           // navigate("/x");
         } else if (res.data?.verified == false) {
           navigate("/verify");
@@ -231,6 +227,8 @@ export default function DataProvider({ children }) {
         setSignin,
         savedIds,
         setSavedIds,
+        gifs,
+        setGifs,
       }}
     >
       {children}

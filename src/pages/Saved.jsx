@@ -9,6 +9,8 @@ export default function Saved({ setShowBars }) {
     carouselsLoaded,
     dispatchLoaded,
     setSaved,
+    getAxios,
+    setSavedIds,
   } = useContext(DataContext);
   const [finalData, setFinalData] = useState([]);
 
@@ -21,14 +23,16 @@ export default function Saved({ setShowBars }) {
   };
 
   useEffect(() => {
-    // const x = saved.map((s) => {
-    //   if (s?.id) return data.find((d) => (d._id = s.id));
-    //   else return s;
-    // });
-    // setSaved([...x]);
+    if (saved.length == 0) {
+      getAxios("data/saved", { id: "surya" }, true).then((res) => {
+        console.log(res.data);
+        setSaved(res.data);
+        setFinalData(res.data);
+        setSavedIds(res.data.map((s) => s._id));
+      });
+    }
     setFinalData(saved);
   }, []);
-
   return (
     <div>
       <Section

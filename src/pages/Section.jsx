@@ -15,6 +15,7 @@ import Share from "../components/Share";
 import { createPortal } from "react-dom";
 import Suggest from "../components/Suggest";
 import axios from "axios";
+import LoadingCard from "../components/LoadingCard";
 
 export default function Section({
   data,
@@ -267,6 +268,13 @@ export default function Section({
               }}
             />
           )
+        )}
+        {data.length == 0 && (
+          <>
+            <LoadingCard />
+            <LoadingCard />
+            <LoadingCard />
+          </>
         )}
       </div>
       {share &&

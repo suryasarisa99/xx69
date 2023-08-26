@@ -477,6 +477,9 @@ body {
       // scroll-snap-align: start;
       // scroll-margin-top: 20px;
     }
+    .carousel:last-child {
+      padding-bottom: 30px;
+    }
   }
 }
 
