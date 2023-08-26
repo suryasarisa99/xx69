@@ -81,28 +81,15 @@ export default function Search() {
   useEffect(() => {
     dispatchLoaded({ type: "search", payload: 4 });
 
-    async function wait(time) {
+    if (query != "" && profile) {
       setFilterData([]);
-      await new Promise((resolve, reject) => {
-        setTimeout(resolve, time);
-      });
-
-      // let fdata = searchData.filter((item) =>
-      //   item?.title?.toLowerCase()?.includes(query.toLowerCase())
-      // );
-
-      // let fdata = fuse.current.search(query).map((item) => item.item);
-      // setFilterData(shuffleSearchResults ? shuffleArray(fdata) : fdata);
-
       axios
         .post(`${import.meta.env.VITE_SERVER}/data/search/${finalQuery}`, {
           id: profile._id,
         })
         .then((res) => setFilterData(res.data));
-      // console.log(fdata);
     }
-    if (query != "") wait(0.1);
-  }, [finalQuery]);
+  }, [finalQuery, profile]);
 
   const handleScroll = () => {
     const currentScrollPos = window.scrollY;

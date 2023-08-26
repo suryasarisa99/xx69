@@ -7,9 +7,17 @@ export default function SearchBar({ type_ }) {
   const location = useLocation();
   const [showResults, setShowResults] = useState(false);
   const [query, setQuery] = useState("");
-  const { scrollPos, dispatch } = useContext(DataContext);
+  const { scrollPos, dispatch, setData, profile, getAxios } =
+    useContext(DataContext);
   useEffect(() => {}, [location.pathname]);
   if (type_ == "none") return null;
+
+  const handleLBtn = (route) => {
+    setData([]);
+    getAxios(`data/${route}`, { id: profile._id }).then((res) => {
+      setData(res.data);
+    });
+  };
 
   function handleSearch(e) {
     e?.preventDefault();
@@ -28,7 +36,7 @@ export default function SearchBar({ type_ }) {
     navigate(`/search/${type_}/${result}`);
   }
   return (
-    <div>
+    <div className="top-search-bar">
       <form action="" className="search-bar" onSubmit={handleSearch}>
         <input
           type="text"
@@ -42,6 +50,19 @@ export default function SearchBar({ type_ }) {
           placeholder="Search"
         />
       </form>
+      {type_ == "home" && (
+        <div className="label-buttons">
+          <div className="l-btn" onClick={() => handleLBtn("trending")}>
+            Trending
+          </div>
+          <div className="l-btn" onClick={() => handleLBtn("no-name")}>
+            No Name&apos;s
+          </div>
+          <div className="l-btn" onClick={() => handleLBtn("no-title")}>
+            No Title&apos;s
+          </div>
+        </div>
+      )}
       {showResults && <SearchResults name={query} onSelect={handleSearch2} />}
     </div>
   );
