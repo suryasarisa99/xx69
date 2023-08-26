@@ -8,16 +8,18 @@ import axios from "axios";
 
 export default function Profile() {
   const { name } = useParams();
-  const { data, carouselsLoaded, dispatchLoaded } = useContext(DataContext);
+  const { data, carouselsLoaded, dispatchLoaded, profile } =
+    useContext(DataContext);
   const navigate = useNavigate();
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [profileData, setProfileData] = useState([]);
 
   useEffect(() => {
+    scrollTo({ top: 0, behavior: "instant" });
     async function fetchData() {
       const fData = (
         await axios.post(`${import.meta.env.VITE_SERVER}/data/search/${name}`, {
-          id: "surya",
+          id: profile._id,
         })
       ).data;
       console.log(fData);

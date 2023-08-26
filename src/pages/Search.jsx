@@ -20,8 +20,14 @@ export default function Search() {
   const [showBars, setShowBars] = useState(true);
   const [showResults, setShowResults] = useState(false);
   const prevScrollPos = useRef(null);
-  const { shuffleSearchResults, data, saved, carouselsLoaded, dispatchLoaded } =
-    useContext(DataContext);
+  const {
+    profile,
+    shuffleSearchResults,
+    data,
+    saved,
+    carouselsLoaded,
+    dispatchLoaded,
+  } = useContext(DataContext);
 
   let [filteredData, setFilterData] = useState([]);
   // shuffleSearchResults ? data[selected].data : data[selected].data;
@@ -90,7 +96,7 @@ export default function Search() {
 
       axios
         .post(`${import.meta.env.VITE_SERVER}/data/search/${finalQuery}`, {
-          id: "surya",
+          id: profile._id,
         })
         .then((res) => setFilterData(res.data));
       // console.log(fdata);

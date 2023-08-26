@@ -5,7 +5,7 @@ import SearchBar2 from "../components/SearchBar2";
 import Fuse from "fuse.js";
 import actressX from "../../actress.json";
 export default function Profiles() {
-  const { profiles } = useContext(DataContext);
+  const { profiles, getAxios, setProfiles } = useContext(DataContext);
   const [query, setQuery] = useState("");
   // const [profiles, setProfiles] = useState([]);
   const pFuse = new Fuse(profiles, { threshold: 0.4, keys: ["name"] });
@@ -13,6 +13,12 @@ export default function Profiles() {
   let actress = useRef(null);
   let totalVerCarousels = useRef(0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (profiles.length == 0) {
+      getAxios("data/profiles").then((res) => setProfiles(res.data));
+    }
+  }, []);
 
   function queryOnChange(q) {
     setQuery(q);

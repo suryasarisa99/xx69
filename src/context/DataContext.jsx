@@ -14,6 +14,7 @@ export default function DataProvider({ children }) {
   const [timeOut, setTimeOut] = useState(false);
   const [tempLogin, setTempLogin] = useState(false);
   const [wrongPass, setWrongPass] = useState(false);
+  const [profile, setProfile] = useState(null);
   const [showBars, setShowBars] = useState(true);
   const [profiles, setProfiles] = useState([]);
   const [saved, setSaved] = useState([]);
@@ -128,7 +129,8 @@ export default function DataProvider({ children }) {
         if (res.data?.status) {
           setSignin(true);
           setData(res.data.data);
-          setProfiles(res.data.profiles);
+          console.log(res.data.profile);
+          setProfile(res.data.profile);
           // navigate("/x");
         } else if (res.data?.verified == false) {
           navigate("/verify");
@@ -229,6 +231,9 @@ export default function DataProvider({ children }) {
         setSavedIds,
         gifs,
         setGifs,
+        setProfiles,
+        profile,
+        setProfile,
       }}
     >
       {children}

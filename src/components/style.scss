@@ -49,7 +49,9 @@ body {
   position: relative;
   .images-container {
     display: flex;
-    align-items: center;
+    // align-items: center;
+    align-items: stretch;
+    // background-color: red;
     overflow-x: scroll;
     gap: 5px;
     margin-bottom: 2px;
@@ -65,15 +67,31 @@ body {
       flex-shrink: 0;
       justify-content: center;
       position: relative;
-
       display: flex;
-      align-items: center;
+      align-items: stretch;
+      // background: url("https://i.ibb.co/mqmMjmX/00826-1408492277-Jai-Fakes-standard-scale-4-00x.jpg");
+      // align-items: center;
+      // backdrop-filter: blur(100px);
+      // -webkit-filter: blur(8px);
+
       scroll-snap-align: start;
       scroll-snap-stop: always;
       // padding: 10px;
     }
+    .img-boxx::before {
+      content: "";
+      background-color: green;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: -1;
+      filter: blur(60px); /* Adjust the blur amount as needed */
+    }
     .heart-cover {
       position: absolute;
+      top: 50%;
       // background-color: rgb(51, 126, 54);
       z-index: 2;
     }

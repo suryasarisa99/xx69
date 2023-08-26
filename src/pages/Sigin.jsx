@@ -5,8 +5,7 @@ import { DataContext } from "../context/DataContext";
 import "./siginstyles.scss";
 export default function Sigin() {
   let navigate = useNavigate();
-  let { setUserData, userData, setSignin, setOtherUsers, otherUsers } =
-    useContext(DataContext);
+  let { setSignin, setProfile, setData } = useContext(DataContext);
   // useEffect(() => {
   //   if (userData) {
   //     console.log("user Data found");
@@ -26,6 +25,8 @@ export default function Sigin() {
         if (!res.data.status) {
           //
         } else {
+          setData(res.data.data);
+          setProfile(res.data.profile);
           localStorage.setItem("token", res.data.token);
           setSignin(true);
           navigate("/x");

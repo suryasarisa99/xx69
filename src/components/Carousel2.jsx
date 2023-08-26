@@ -21,6 +21,7 @@ export default function Carousel({
   const {
     slide,
     lastImg,
+    profile,
     reverseOrder,
     saved,
     setSaved,
@@ -59,12 +60,12 @@ export default function Carousel({
   };
   const addBookMark = () => {
     setIsSaved(true);
-    getAxios("data/save", { id: "surya", savedId: id });
+    getAxios("data/save", { id: profile._id, savedId: id });
     setSaved((prv) => [...prv, item]);
     setSavedIds((prv) => [...prv, id]);
   };
   const removeBookMark = () => {
-    getAxios("data/unsave", { id: "surya", savedId: id });
+    getAxios("data/unsave", { id: profile._id, savedId: id });
     setIsSaved(false);
     setSaved((prv) => prv.filter((s) => s._id != id));
     setSavedIds((prv) => prv.filter((sid) => sid != id));
@@ -77,6 +78,7 @@ export default function Carousel({
     }, 100);
     setTimeout(() => {
       setHeart(false);
+      setSM(false);
     }, 1000);
   };
 
@@ -96,7 +98,11 @@ export default function Carousel({
       <div className="images-container" ref={imgConRef}>
         {images.map((image, index) => {
           return (
-            <div key={index + id} className="img-box">
+            <div
+              key={index + id}
+              className="img-box"
+              // style={{ background: `url(${image})` }}
+            >
               {imgLoaded[index] ? (
                 <img
                   key={index + id}
@@ -105,7 +111,7 @@ export default function Carousel({
                   onDoubleClick={handleBigHeart}
                 ></img>
               ) : (
-                <LoadingImg />
+                <LoadingImg name={item.name} />
               )}
 
               {/* To Display Heart */}
@@ -164,7 +170,7 @@ export default function Carousel({
                 ref={likeRef}
                 className="heart heart-fill"
                 onClick={() => {
-                  getAxios("data/unlike", { itemId: id, accId: "surya" });
+                  getAxios("data/unlike", { itemId: id, accId: profile._id });
                   setLike(false);
                   setLikesCount((prv) => prv - 1);
                   removeLike(id); // to change in data
@@ -174,7 +180,7 @@ export default function Carousel({
               <div
                 ref={likeRef}
                 onClick={() => {
-                  getAxios("data/like", { itemId: id, accId: "surya" });
+                  getAxios("data/like", { itemId: id, accId: profile._id });
                   setLike(true);
                   setLikesCount((prv) => prv + 1);
                   addLike(id); // to change in data

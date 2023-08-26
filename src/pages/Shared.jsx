@@ -5,18 +5,19 @@ import Carousel1 from "../components/Carousel1";
 import Carousel2 from "../components/Carousel2";
 
 export default function Shared() {
-  const { data, isCarousel2 } = useContext(DataContext);
+  const { isCarousel2, getAxios } = useContext(DataContext);
   const { id } = useParams();
   let [item, setItem] = useState(null);
   useEffect(() => {
-    setItem(data.filter((item) => item._id == id)[0]);
-  }, [data, id]);
-  // console.log(data.flatMap((d) => d.data));
+    getAxios("data/find/" + id).then((res) => setItem(res.data));
+  }, [id]);
+
+  console.log(item);
   return (
     <div>
       {item &&
         (isCarousel2 ? (
-          <Carousel2 {...item} images={item.images} />
+          <Carousel2 index={"x"} item={item} />
         ) : (
           <Carousel1 {...item} />
         ))}

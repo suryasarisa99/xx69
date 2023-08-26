@@ -5,7 +5,7 @@ export default function LoadingCard() {
     <div className="carousel card">
       <div className="loading-card">
         <div className="glossy-effect">
-          <p>Loading ...</p>
+          <p className="large-text">Loading ...X</p>
         </div>
       </div>
       <div className="bottom-bar">

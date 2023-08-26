@@ -10,6 +10,7 @@ export default function Saved({ setShowBars }) {
     dispatchLoaded,
     setSaved,
     getAxios,
+    profile,
     setSavedIds,
   } = useContext(DataContext);
   const [finalData, setFinalData] = useState([]);
@@ -23,8 +24,8 @@ export default function Saved({ setShowBars }) {
   };
 
   useEffect(() => {
-    if (saved.length == 0) {
-      getAxios("data/saved", { id: "surya" }, true).then((res) => {
+    if (saved.length == 0 && profile) {
+      getAxios("data/saved", { id: profile._id }).then((res) => {
         console.log(res.data);
         setSaved(res.data);
         setFinalData(res.data);
@@ -32,7 +33,7 @@ export default function Saved({ setShowBars }) {
       });
     }
     setFinalData(saved);
-  }, []);
+  }, [profile]);
   return (
     <div>
       <Section
