@@ -2,8 +2,14 @@ import { useEffect, useContext, useState } from "react";
 import { DataContext } from "../context/DataContext";
 import Section from "./Section";
 export default function Saved({ setShowBars }) {
-  const { shuffleSaved, data, saved, carouselsLoaded, dispatchLoaded } =
-    useContext(DataContext);
+  const {
+    shuffleSaved,
+    data,
+    saved,
+    carouselsLoaded,
+    dispatchLoaded,
+    setSaved,
+  } = useContext(DataContext);
   const [finalData, setFinalData] = useState([]);
 
   const howToLoadData = {
@@ -13,15 +19,15 @@ export default function Saved({ setShowBars }) {
     dispatchLoaded,
     swipeOnLast: 3,
   };
+
   useEffect(() => {
-    async function wait(time) {
-      setFinalData([]);
-      await new Promise((res, rej) => setTimeout(res, time));
-      let savedData = data.filter((d) => saved.includes(d._id));
-      setFinalData(shuffleSaved ? shuffleArray(savedData) : savedData);
-    }
-    wait(10);
-  }, [data, shuffleSaved]);
+    // const x = saved.map((s) => {
+    //   if (s?.id) return data.find((d) => (d._id = s.id));
+    //   else return s;
+    // });
+    // setSaved([...x]);
+    setFinalData(saved);
+  }, []);
 
   return (
     <div>

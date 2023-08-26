@@ -89,7 +89,9 @@ export default function Search() {
       // setFilterData(shuffleSearchResults ? shuffleArray(fdata) : fdata);
 
       axios
-        .get(`${import.meta.env.VITE_SERVER}/data/search/${finalQuery}`)
+        .post(`${import.meta.env.VITE_SERVER}/data/search/${finalQuery}`, {
+          id: "surya",
+        })
         .then((res) => setFilterData(res.data));
       // console.log(fdata);
     }

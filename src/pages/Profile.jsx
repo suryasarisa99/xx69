@@ -16,7 +16,9 @@ export default function Profile() {
   useEffect(() => {
     async function fetchData() {
       const fData = (
-        await axios.get(`${import.meta.env.VITE_SERVER}/data/search/${name}`)
+        await axios.post(`${import.meta.env.VITE_SERVER}/data/search/${name}`, {
+          id: "surya",
+        })
       ).data;
       console.log(fData);
       const pic = fData?.[Math.floor(Math.random() * fData.length)]?.images[0];

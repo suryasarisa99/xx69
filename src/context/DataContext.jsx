@@ -16,9 +16,8 @@ export default function DataProvider({ children }) {
   const [wrongPass, setWrongPass] = useState(false);
   const [showBars, setShowBars] = useState(true);
   const [profiles, setProfiles] = useState([]);
-  const [saved, setSaved] = useState(
-    JSON.parse(localStorage.getItem("saved")) || []
-  );
+  const [saved, setSaved] = useState([]);
+  const [savedIds, setSavedIds] = useState([]);
   // let [selectedData, setSelectedData] = useState()
   // localStorage.clear();
   // Toggle States
@@ -74,9 +73,9 @@ export default function DataProvider({ children }) {
   });
   const accFuseRef = useRef(null);
 
-  useEffect(() => {
-    localStorage.setItem("saved", JSON.stringify(saved));
-  }, [saved]);
+  // useEffect(() => {
+  //   localStorage.setItem("saved", JSON.stringify(saved));
+  // }, [saved]);
 
   useEffect(() => {
     // navigate("/signin");
@@ -129,6 +128,11 @@ export default function DataProvider({ children }) {
           setSignin(true);
           setData(res.data.data);
           setProfiles(res.data.profiles);
+          getAxios("data/saved", { id: "surya" }, true).then((res) => {
+            console.log(res.data);
+            setSaved(res.data);
+            setSavedIds(res.data.map((s) => s._id));
+          });
           // navigate("/x");
         } else if (res.data?.verified == false) {
           navigate("/verify");
@@ -173,10 +177,16 @@ export default function DataProvider({ children }) {
       });
   };
 
+  function getAxios(url, body) {
+    if (body) return axios.post(`${import.meta.env.VITE_SERVER}/${url}`, body);
+    return axios.get(`${import.meta.env.VITE_SERVER}/${url}`, body);
+  }
+
   return (
     <DataContext.Provider
       value={{
         login,
+        getAxios,
         tempLogin,
         timeOut,
         wrongPass,
@@ -219,6 +229,8 @@ export default function DataProvider({ children }) {
         profiles,
         signin,
         setSignin,
+        savedIds,
+        setSavedIds,
       }}
     >
       {children}

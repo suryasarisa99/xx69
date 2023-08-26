@@ -198,11 +198,32 @@ export default function Section({
     //   }, 10);
     // };
   }, []);
+  function addLike(id) {
+    setData((prv) =>
+      prv.map((item) => {
+        if (id == item._id) {
+          item.likes += 1;
+          item.likeStatus = true;
+          return item;
+        } else return item;
+      })
+    );
+  }
 
+  function removeLike(id) {
+    setData((prv) =>
+      prv.map((item) => {
+        if (id == item._id) {
+          item.likeStatus = false;
+          item.likes -= 1;
+          return item;
+        } else return item;
+      })
+    );
+  }
   return (
     <div className="x section">
       {/* <p>loaded carousels: {carouselsLoaded[type_]}</p> */}
-      <p>{data.length}</p>
       <div className="section-carousels" ref={sectionRef}>
         {data.slice(0, carouselsLoaded[type_]).map((item, index) =>
           isCarousel2 ? (
@@ -212,20 +233,12 @@ export default function Section({
               onShare={showShare}
               showSuggestions={showSuggestions}
               id={item._id}
-              images={item?.images}
-              title={item?.title}
-              name={item?.name}
+              addLike={addLike}
+              removeLike={removeLike}
+              item={item}
               onSwipe={() => {
                 handleCarouselSwipe(index);
-                console.log(
-                  `conditon: ${type_ != "home" || data.length - 1 - index > 8}`
-                );
-                console.log(
-                  `${data.length - 1} - ${index} = ${data.length - 1 - index} `
-                );
-
                 if (type_ != "home" || data.length - 1 - index > 8) return;
-                console.log("<== Data is ADDEd ==>");
                 axios.get(`${import.meta.env.VITE_SERVER}/data`).then((res) => {
                   console.log(res.data);
                   setData((prvData) => [...prvData, ...res.data.data]);

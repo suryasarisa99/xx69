@@ -48,16 +48,16 @@ export default function X() {
   return (
     <div className="x">
       {showBars && <SearchBar type_={searchType} />}
-      <Routes>
+      <Routes className="xxx">
         <Route path="*" element={<Home setShowBars={setShowBars} />} />
         <Route path="/videos" element={<Videos setShowBars={setShowBars} />} />
         <Route path="/saved" element={<Saved setShowBars={setShowBars} />} />
         <Route path="/profiles" element={<Profiles />} />
         <Route path="/settings" element={<Settings />} />
       </Routes>
-      <SideNav />
       {/* <div className="desktop-nav">hello hi</div> */}
       {showBars && <BottomNav />}
+      <SideNav />
     </div>
   );
 }
