@@ -73,9 +73,10 @@ export default function Carousel({
     });
 
     function sample() {
-      const thresold = 80;
+      const thresold = 0.14;
       let hlen = 0;
-      for (let i = 1; i < len.length; i++) if (len[hlen].h < len[i].h) hlen = i;
+      for (let i = 1; i < len.length; i++)
+        if (len[hlen].h / len[hlen].w < len[i].h / len[i].w) hlen = i;
       // for (let i = 0; i < len.length; i++) {
       //   if (len[hlen].h - len[i].h > thresold) {
       //     len[i].show = true;
@@ -83,7 +84,7 @@ export default function Carousel({
       // }
       // setLen([...len]);
       for (let i = 0; i < len.length; i++) {
-        if (len[hlen].h - len[i].h > thresold) {
+        if (len[hlen].h / len[hlen].w - len[i].h / len[i].w > thresold) {
           setShowImgSizer(true);
           break;
         }
