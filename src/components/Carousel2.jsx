@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { DataContext } from "../context/DataContext";
 import { FaRegBookmark, FaBookmark, FaHeart, FaRegHeart } from "react-icons/fa";
+import { RxEnterFullScreen, RxExitFullScreen } from "react-icons/rx";
 import { BsShareFill } from "react-icons/bs";
 import "./style.scss";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,6 +12,7 @@ export default function Carousel({
   onShare,
   id,
   addLike,
+  cIndex,
   removeLike,
   type_,
   showSuggestions,
@@ -27,13 +29,17 @@ export default function Carousel({
     setSaved,
     getAxios,
     savedIds,
+    toggles,
     setSavedIds,
   } = useContext(DataContext);
   let [isSaved, setIsSaved] = useState(savedIds.includes(id));
+  let [smallScreen, setSmallScreen] = useState(false);
+  let [showImgSizer, setShowImgSizer] = useState(false);
   let [like, setLike] = useState(item.likeStatus);
-  let [likesCount, setLikesCount] = useState(item.likes);
+  let [likesCount, setLikesCount] = useState();
   let [heart, setHeart] = useState(false);
   let [SM, setSM] = useState(false);
+  let [noImaes, setNoImages] = useState(false);
   let [DH, setDH] = useState(false);
   const likeRef = useRef(null);
   const imgConRef = useRef(null);
@@ -43,6 +49,11 @@ export default function Carousel({
   let [imgLoaded, setImgLoaded] = useState(
     Array.from({ length: item.images.length }, () => false)
   );
+  let [len, setLen] = useState(
+    Array.from({ length: item.images.length }, () => {
+      return {};
+    })
+  );
 
   let [selected, setSelected] = useState(lastImg ? images.length - 1 : 0);
 
@@ -51,9 +62,65 @@ export default function Carousel({
       loadImage(img).then((img) => {
         imgLoaded[ind] = true;
         setImgLoaded([...imgLoaded]);
+        len[ind] = {
+          w: img.width,
+          h: img.height,
+        };
+        setLen([...len]);
+        if (images.length > 0) sample();
+        AINF();
       });
     });
+
+    function sample() {
+      const thresold = 80;
+      let hlen = 0;
+      for (let i = 1; i < len.length; i++) if (len[hlen].h < len[i].h) hlen = i;
+      // for (let i = 0; i < len.length; i++) {
+      //   if (len[hlen].h - len[i].h > thresold) {
+      //     len[i].show = true;
+      //   }
+      // }
+      // setLen([...len]);
+      for (let i = 0; i < len.length; i++) {
+        if (len[hlen].h - len[i].h > thresold) {
+          setShowImgSizer(true);
+          break;
+        }
+      }
+    }
+
+    function AINF() {
+      // All Images Not Found
+      console.log();
+      let isAINF = true;
+      for (let i = 0; i < len.length; i++) {
+        if (len[i].h != 180 || len[i].w != 180) {
+          isAINF = false;
+          break;
+        }
+      }
+      if (isAINF) {
+        setNoImages(true);
+        getAxios("data/ainf", { id: id });
+      }
+    }
+
+    //* Likes Count
+    if (!isNaN(+item.likes)) setLikesCount(item.likes);
+    else {
+      console.log(` errorInLikes: ${item.likes}`);
+      let x = getAxios("data/re-get-likes", {
+        itemId: id,
+        accId: profile._id,
+      }).then((res) => {
+        setLikesCount(res.data.likes);
+      });
+    }
   }, []);
+
+  if (noImaes) return null;
+
   if (!images || images.length == 0) return null;
   const onDotClick = (index) => {
     setSelected(index);
@@ -88,32 +155,28 @@ export default function Carousel({
       onTouchStart={onSwipe}
       onMouseOverCapture={onSwipe}
     >
-      {/* <p>{id}</p> */}
-      {/* <p>
-        {imgLoaded.map((i) => {
-          if (i) return "true ";
-          else return "false ";
-        })}
-      </p> */}
       <div className="images-container" ref={imgConRef}>
         {images.map((image, index) => {
           return (
-            <div
-              key={index + id}
-              className="img-box"
-              // style={{ background: `url(${image})` }}
-            >
+            <div key={index + id} className="img-box">
+              {toggles.devMode && (
+                <div className="temp">
+                  <p>
+                    H: {len[index].h} W:{len[index].w}
+                  </p>
+                </div>
+              )}
               {imgLoaded[index] ? (
                 <img
                   key={index + id}
                   src={image}
                   alt={item?.name || item?.title || "x-img"}
                   onDoubleClick={handleBigHeart}
+                  style={{ objectFit: smallScreen ? "contain" : "cover" }}
                 ></img>
               ) : (
-                <LoadingImg name={item.name} />
+                <LoadingImg name={item.name} index={cIndex} />
               )}
-
               {/* To Display Heart */}
               {heart && !DH && (
                 <motion.div
@@ -162,12 +225,23 @@ export default function Carousel({
           )}
         </div>
         <div className="icons">
+          {images.length > 0 && showImgSizer && (
+            <motion.div
+              whileTap={{ scale: 1.3 }}
+              onClick={() => setSmallScreen((prv) => !prv)}
+            >
+              {smallScreen ? (
+                <RxEnterFullScreen className="icon small-screen" />
+              ) : (
+                <RxExitFullScreen className="icon small-screen" />
+              )}
+            </motion.div>
+          )}
           <motion.div whileTap={{ scale: 1.3 }} className="likes-box">
             {likesCount != 0 && <p className="likes-count">{likesCount}</p>}
 
             {like ? (
               <FaHeart
-                ref={likeRef}
                 className="heart heart-fill"
                 onClick={() => {
                   getAxios("data/unlike", { itemId: id, accId: profile._id });

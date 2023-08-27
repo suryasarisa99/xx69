@@ -1,8 +1,13 @@
 import React from "react";
 import "./loadingcard.scss";
-export default function LoadingCard() {
+export default function LoadingCard({ onSwipe, index, ...rest }) {
   return (
-    <div className="carousel card">
+    <div
+      className="carousel card"
+      onTouchStart={onSwipe}
+      onMouseOverCapture={onSwipe}
+      {...rest}
+    >
       <div className="loading-card">
         <div className="glossy-effect">
           <p className="large-text">Loading ...X</p>

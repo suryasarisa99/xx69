@@ -1,0 +1,53 @@
+  // const [login, setLogin] = useState(true);
+  // const [timeOut, setTimeOut] = useState(false);
+  // const [tempLogin, setTempLogin] = useState(false);
+  // const [wrongPass, setWrongPass] = useState(false);
+
+exports:
+        // login,
+        // tempLogin,
+        // timeOut,
+        // wrongPass,
+        // setWrongPass,
+        // setTimeOut,
+        // setLogin,
+        // setTempLogin,
+
+
+ const handlePass = (e) => {
+    e.preventDefault();
+    axios
+      .post(
+        `${import.meta.env.VITE_SERVER}/login`,
+        {
+          pass: e.target.pass.value,
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.status) {
+          setLogin(true);
+          setTimeOut(res.data.timeOut);
+
+          navigate("/home");
+        }
+      });
+  };
+  const handleTempPass = (e) => {
+    e.preventDefault();
+    axios
+      .post(`${import.meta.env.VITE_SERVER}/temp-login`, {
+        pass: e.target.pass.value,
+      })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.status) {
+          if (wrongPass) setWrongPass(false);
+          console.log();
+          setTempLogin(true);
+          setTimeOut(res.data.timeOut);
+          navigate("/");
+        } else setWrongPass(true);
+      });
+  };

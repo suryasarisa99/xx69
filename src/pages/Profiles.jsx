@@ -3,25 +3,31 @@ import { DataContext } from "../context/DataContext";
 import { useNavigate } from "react-router-dom";
 import SearchBar2 from "../components/SearchBar2";
 import Fuse from "fuse.js";
+
 import actressX from "../../actress.json";
 export default function Profiles() {
-  const { profiles, getAxios, setProfiles } = useContext(DataContext);
+  const { profiles, getAxios, setProfiles, fetching } = useContext(DataContext);
   const [query, setQuery] = useState("");
   // const [profiles, setProfiles] = useState([]);
   const pFuse = new Fuse(profiles, { threshold: 0.4, keys: ["name"] });
-
   let actress = useRef(null);
   let totalVerCarousels = useRef(0);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (profiles.length == 0) {
-      getAxios("data/profiles").then((res) => setProfiles(res.data));
+    if (profiles.length == 0 && fetching.current.profiles == 0) {
+      fetching.current.profiles = 1;
+      console.log("fetching profiles - from Profiles");
+      getAxios("data/profiles").then((res) => {
+        fetching.current.profiles = 2;
+        setProfiles(res.data);
+      });
     }
-  }, []);
+  }, [fetching]);
 
   function queryOnChange(q) {
     setQuery(q);
+
     scrollTo({ top: 0 });
   }
 

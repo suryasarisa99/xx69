@@ -8,8 +8,7 @@ import axios from "axios";
 
 export default function Profile() {
   const { name } = useParams();
-  const { data, carouselsLoaded, dispatchLoaded, profile } =
-    useContext(DataContext);
+  const { carouselsLoaded, dispatchLoaded, profile } = useContext(DataContext);
   const navigate = useNavigate();
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [profileData, setProfileData] = useState([]);
@@ -41,7 +40,6 @@ export default function Profile() {
     total: profileData.length,
   };
 
-  function getProfilePhoto() {}
   return (
     <div className="profile">
       <div className="head-bar">
@@ -51,7 +49,6 @@ export default function Profile() {
         Profile
       </div>
       <div className="main">
-        {/* <div className="pic"></div> */}
         <div className="image-container">
           <img src={profilePhoto} alt="" className="img" />
         </div>
@@ -69,6 +66,7 @@ export default function Profile() {
 
       <Section
         data={profileData}
+        setData={setProfileData}
         howToLoadData={howToLoadData}
         type_="profile"
       />

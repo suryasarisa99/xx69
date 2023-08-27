@@ -6,115 +6,43 @@ import { GrLinkNext } from "react-icons/gr";
 import Suggest from "../components/Suggest";
 
 export default function Settings() {
-  const {
-    slide,
-    setSlide,
-    lastImg,
-    setLastImg,
-    reverseOrder,
-    setReverseOrder,
-    shuffleSearchResults,
-    shuffleSection,
-    setShuffleSearchResults,
-    setShuffleSection,
-    shuffleSaved,
-    setShuffleSaved,
-    toggles,
-    persistantScroll,
-    setPersistantScroll,
-    isCarousel2,
-    setIsCarousel2,
-    fromDb,
-    setFromDb,
-  } = useContext(DataContext);
+  const { toggles } = useContext(DataContext);
   const navigate = useNavigate();
   return (
     <div className="settings">
       <h1>Settings</h1>
-      <div className="section">
-        <h3>Carousel</h3>
-        <div className="toggle">
-          <p>Slide Animation</p>
-          <Switch
-            state={slide}
-            stateFun={setSlide}
-            saveAs="slide"
-            disabledWith={isCarousel2 ? true : undefined}
-          />
-        </div>
-        <div className="toggle">
-          <p>Set to Last Image</p>
-          <Switch
-            state={lastImg}
-            stateFun={setLastImg}
-            saveAs="lastImg"
-            disabledWith={isCarousel2 ? false : undefined}
-          />
-        </div>
-        <div className="toggle">
-          <p>Reverse Images</p>
-          <Switch
-            state={reverseOrder}
-            stateFun={setReverseOrder}
-            saveAs="reverse"
-          />
-        </div>
-        <div className="toggle">
-          <p>Use Carousel2</p>
-          <Switch
-            state={isCarousel2}
-            stateFun={setIsCarousel2}
-            saveAs="carousel2"
-          />
-        </div>
-      </div>
-      <div className="section">
-        <h3>Shuffle</h3>
-        <div className="toggle">
-          <p>Shuffle Home Results</p>
-          <Switch
-            state={shuffleSection}
-            stateFun={setShuffleSection}
-            saveAs="shuffleSection"
-          />
-        </div>
-        <div className="toggle">
-          <p>Shuffle Search Results</p>
-          <Switch
-            state={shuffleSearchResults}
-            stateFun={setShuffleSearchResults}
-            saveAs="shuffleResults"
-          />
-        </div>
-        <div className="toggle">
-          <p>Shuffle Saved Items</p>
-          <Switch
-            state={shuffleSaved}
-            stateFun={setShuffleSaved}
-            saveAs="shuffleSaved"
-          />
-        </div>
-      </div>
 
-      <div className="section">
-        <h3>Persistant</h3>
-        <div className="toggle">
-          <p>Persistant scroll</p>
-          <Switch
-            state={persistantScroll}
-            stateFun={setPersistantScroll}
-            saveAs="persistantScroll"
-          />
-        </div>
-        <div className="toggle">
-          <p>From Db</p>
-          <Switch state={fromDb} stateFun={setFromDb} saveAs="fromDb" />
-        </div>
-      </div>
+      <Group title="Carousel">
+        <Toggle
+          state="slide"
+          disabledWith={toggles.isCarousel2 ? true : undefined}
+        >
+          Slide Animation
+        </Toggle>
+        <Toggle
+          state="lastImg"
+          disabledWith={toggles.isCarousel2 ? false : undefined}
+        >
+          Set to Last Image
+        </Toggle>
+        <Toggle state="reverseOrder">Reverse Images</Toggle>
+        <Toggle state="isCarousel2">Use Carousel2</Toggle>
+      </Group>
+
+      <Group title="Shuffle">
+        <Toggle state="shuffleSearchResults">Shuffle Search Results</Toggle>
+        <Toggle state="shuffleSaved">Shuffle Saved Items</Toggle>
+      </Group>
+
+      <Group title="Other">
+        <Toggle state="persistantScroll"> Persistant scroll</Toggle>
+        <Toggle state="fuzzySearch"> Fuzzy Search</Toggle>
+        <Toggle state="devMode">Dev Mode</Toggle>
+      </Group>
 
       <div className="section">
         <div className="link">
-          Go To Previous Version Of X69{" "}
+          Go To Previous Version Of X69
           <i
             className="icon-outer"
             onClick={() => open("https://6x9.vercel.app")}
@@ -123,6 +51,24 @@ export default function Settings() {
           </i>
         </div>
       </div>
+    </div>
+  );
+}
+
+function Group({ children, title }) {
+  return (
+    <div className="section">
+      <h3>{title}</h3>
+      {children}
+    </div>
+  );
+}
+
+function Toggle({ children, state, ...rest }) {
+  return (
+    <div className="toggle">
+      <p>{children}</p>
+      <Switch state={state} {...rest} />
     </div>
   );
 }

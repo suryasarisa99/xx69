@@ -1,15 +1,16 @@
 import React, { useState, useContext } from "react";
 import "./switch.css"; // You can create a separate CSS file for styling
 import { DataContext } from "../context/DataContext";
-const Switch = ({ state, stateFun, saveAs, disabledWith }) => {
+const Switch = ({ state, disabledWith }) => {
   //   const [state, stateFun] = useState(checked || false);
   // console.log("toggle set");
-  let { toggles } = useContext(DataContext);
+  let { toggles, tg, dispatchToggles } = useContext(DataContext);
   const handleToggle = () => {
     if (disabledWith == undefined) {
-      toggles[saveAs] = !state;
-      localStorage.setItem("toggles", JSON.stringify(toggles));
-      stateFun(!state);
+      tg[state] = !toggles[state];
+      localStorage.setItem("toggles", JSON.stringify(tg));
+      // stateFun(!state);
+      dispatchToggles({ type: state, payload: !toggles[state] });
     }
   };
 
@@ -19,7 +20,7 @@ const Switch = ({ state, stateFun, saveAs, disabledWith }) => {
     >
       <input
         type="checkbox"
-        checked={disabledWith == undefined ? state : disabledWith}
+        checked={disabledWith == undefined ? toggles[state] : disabledWith}
         disabled={disabledWith == undefined ? false : true}
         onChange={handleToggle}
       />

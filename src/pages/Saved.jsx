@@ -3,14 +3,13 @@ import { DataContext } from "../context/DataContext";
 import Section from "./Section";
 export default function Saved({ setShowBars }) {
   const {
-    shuffleSaved,
-    data,
     saved,
     carouselsLoaded,
     dispatchLoaded,
     setSaved,
     getAxios,
     profile,
+    fetching,
     setSavedIds,
   } = useContext(DataContext);
   const [finalData, setFinalData] = useState([]);
@@ -24,32 +23,32 @@ export default function Saved({ setShowBars }) {
   };
 
   useEffect(() => {
-    if (saved.length == 0 && profile) {
+    if (saved.length == 0 && profile && fetching.current.saved == 0) {
+      fetching.current.saved = 1;
+      console.log("fetching saved - from saved");
       getAxios("data/saved", { id: profile._id }).then((res) => {
+        fetching.current.saved = 2;
         console.log(res.data);
         setSaved(res.data);
         setFinalData(res.data);
         setSavedIds(res.data.map((s) => s._id));
       });
     }
+  }, [profile, fetching]);
+
+  useEffect(() => {
     setFinalData(saved);
   }, [profile]);
+
   return (
     <div>
       <Section
         setShowBars={setShowBars}
         data={finalData}
+        setData={setFinalData}
         howToLoadData={howToLoadData}
         type_="saved"
       />
     </div>
   );
-}
-
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
 }

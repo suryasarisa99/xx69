@@ -7,13 +7,24 @@ export default function SearchBar({ type_ }) {
   const location = useLocation();
   const [showResults, setShowResults] = useState(false);
   const [query, setQuery] = useState("");
-  const { scrollPos, dispatch, setData, profile, getAxios } =
-    useContext(DataContext);
+  const {
+    scrollPos,
+    dispatch,
+    toggles,
+    dispatchLoaded,
+    setData,
+    profile,
+    getAxios,
+  } = useContext(DataContext);
   useEffect(() => {}, [location.pathname]);
   if (type_ == "none") return null;
 
   const handleLBtn = (route) => {
     setData([]);
+    document
+      .querySelector(".section-carousels")
+      .scrollTo({ top: 0, behavior: "instant" });
+    dispatchLoaded({ type: "home", payload: 5 });
     getAxios(`data/${route}`, { id: profile._id }).then((res) => {
       setData(res.data);
     });
@@ -55,12 +66,20 @@ export default function SearchBar({ type_ }) {
           <div className="l-btn" onClick={() => handleLBtn("trending")}>
             Trending
           </div>
-          <div className="l-btn" onClick={() => handleLBtn("no-name")}>
-            No Name&apos;s
-          </div>
-          <div className="l-btn" onClick={() => handleLBtn("no-title")}>
-            No Title&apos;s
-          </div>
+          <div className="l-btn">Specials</div>
+          {toggles.devMode && (
+            <>
+              <div className="l-btn" onClick={() => handleLBtn("no-name")}>
+                No Name&apos;s
+              </div>
+              <div className="l-btn" onClick={() => handleLBtn("no-title")}>
+                No Title&apos;s
+              </div>
+              <div className="l-btn" onClick={() => handleLBtn("ainf-imgs")}>
+                AINF
+              </div>
+            </>
+          )}
         </div>
       )}
       {showResults && <SearchResults name={query} onSelect={handleSearch2} />}

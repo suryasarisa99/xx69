@@ -26,16 +26,16 @@ export default function SideNav() {
       switch (location.pathname) {
         case "/":
           dispatch({ type: "home", payload: scrollY });
-          console.log("savded scroll pos of home");
+          // console.log("savded scroll pos of home");
           break;
         case "/x/home":
           dispatch({ type: "home", payload: scrollY });
-          console.log("savded scroll pos of home");
-          console.log(scrollPos["home"]);
+          // console.log("savded scroll pos of home");
+          // console.log(scrollPos["home"]);
           break;
         case "/x/saved":
           dispatch({ type: "saved", payload: scrollY });
-          console.log("savded scroll pos of Saved");
+          // console.log("savded scroll pos of Saved");
           break;
       }
   }
@@ -61,7 +61,7 @@ export default function SideNav() {
     navigate("/x/profiles");
   }
   useEffect(() => {
-    console.log(location.pathname);
+    // console.log(location.pathname);
   }, [location.pathname]);
   const Home =
     location.pathname == "/" || location.pathname == "/x/home"

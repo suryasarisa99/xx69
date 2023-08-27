@@ -1,14 +1,7 @@
-import {
-  useEffect,
-  useContext,
-  useState,
-  useRef,
-  createRef,
-  useLayoutEffect,
-} from "react";
+import { useEffect, useContext, useState, useRef } from "react";
 import Carousel1 from "../components/Carousel1";
 import Carousel2 from "../components/Carousel2";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { DataContext } from "../context/DataContext";
 import useCarousel from "../../hooks/useCarousel";
 import Share from "../components/Share";
@@ -26,15 +19,8 @@ export default function Section({
 }) {
   howToLoadData.total = data.length;
   const { handleCarouselSwipe, setTotal } = useCarousel(howToLoadData);
-  const {
-    scrollPos,
-    dispatch,
-    carouselsLoaded,
-    dispatchLoaded,
-    persistantScroll,
-    isCarousel2,
-    setShowBars,
-  } = useContext(DataContext);
+  const { scrollPos, carouselsLoaded, setShowBars, toggles } =
+    useContext(DataContext);
   // const [finalData, setFinalData] = useState([]);
   const [share, setShare] = useState(false);
   const [suggestions, setSuggestions] = useState(false);
@@ -105,7 +91,6 @@ export default function Section({
   }
 
   useEffect(() => {
-    // howToLoadData.total = data.length;
     setTotal(data.length);
   }, [data]);
 
@@ -115,10 +100,8 @@ export default function Section({
     setShowBars(true);
     setMiniSearchBar?.(true);
     async function wait() {
-      // console.log(`scrolled to: ${scrollPos[type_]}`);
       if (sectionCopy) {
         await new Promise((res, rej) => {
-          // console.log(`scrollled to: ${scrollPos[type_]}`);
           setTimeout(() => {
             sectionRef.current.scrollTo({
               top: scrollPos[type_],
@@ -132,42 +115,18 @@ export default function Section({
         }, 20);
       }
     }
-    if (persistantScroll) wait();
+    if (toggles.persistantScroll) wait();
 
     sectionCopy.addEventListener("scroll", handleScroll);
     cleanupRef.current = () => {
       sectionCopy.removeEventListener("scroll", handleScroll);
     };
     return () => {
-      cleanupRef.current(); // Call the cleanup function
+      cleanupRef.current();
     };
-  }, [persistantScroll, scrollPos, type_]);
-  // useEffect(() => {
-  //   async function wait() {
-  //     await new Promise((res, rej) => {
-  //       console.log(`scrollled to: ${scrollPos[type_]}`);
-  //       setTimeout(() => {
-  //         sectionRef.current.scrollTo({
-  //           top: scrollPos[type_],
-  //           behavior: "instant",
-  //         });
-  //         res();
-  //       }, 30);
-  //     });
-  //     setTimeout(() => {
-  //       setShowBars(true);
-  //     }, 25);
-  //   }
+  }, [toggles.persistantScroll, scrollPos, type_]);
 
-  //   if (persistantScroll) wait();
-  //   const sectionCopy = sectionRef.current;
-  //   sectionRef.current.addEventListener("scroll", handleScroll);
-  //   return () => {
-  //     sectionCopy?.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
-
-  // event lis for overlay and window scroll
+  //* event lis for overlay and window scroll
   useEffect(() => {
     document.getElementById("overlay").addEventListener("click", removeOverlay);
     // document
@@ -184,21 +143,6 @@ export default function Section({
     };
   }, []);
 
-  useEffect(() => {
-    // const SectionCopy = sectionRef.current;
-    // console.log(SectionCopy);
-    // const handleScroll = () => {
-    //   console.log(`scroll value: ${SectionCopy.scrollTop}`);
-    // };
-    // SectionCopy.addEventListener("scroll", handleScroll);
-    // return () => {
-    //   console.log(" clean up function -> exiting");
-    //   console.log(`scroll value: ${SectionCopy.scrollTop}`);
-    //   setTimeout(() => {
-    //     console.log(`scroll value: ${SectionCopy.scrollTop}`);
-    //   }, 10);
-    // };
-  }, []);
   function addLike(id) {
     setData((prv) =>
       prv.map((item) => {
@@ -227,7 +171,7 @@ export default function Section({
       {/* <p>loaded carousels: {carouselsLoaded[type_]}</p> */}
       <div className="section-carousels" ref={sectionRef}>
         {data.slice(0, carouselsLoaded[type_]).map((item, index) =>
-          isCarousel2 ? (
+          toggles.isCarousel2 ? (
             <Carousel2
               key={index}
               type_={type_}
@@ -237,6 +181,7 @@ export default function Section({
               addLike={addLike}
               removeLike={removeLike}
               item={item}
+              cIndex={index}
               onSwipe={() => {
                 handleCarouselSwipe(index);
                 if (type_ != "home" || data.length - 1 - index > 8) return;
@@ -276,6 +221,16 @@ export default function Section({
             <LoadingCard />
           </>
         )}
+        <LoadingCard
+          onSwipe={() => {
+            handleCarouselSwipe(9999);
+            // if (type_ != "home" || data.length - 1 - index > 8) return;
+            // axios.get(`${import.meta.env.VITE_SERVER}/data`).then((res) => {
+            //   console.log(res.data);
+            //   setData((prvData) => [...prvData, ...res.data.data]);
+            // });
+          }}
+        />
       </div>
       {share &&
         createPortal(

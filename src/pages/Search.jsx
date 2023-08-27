@@ -2,15 +2,11 @@ import { useEffect, useState, useContext, useRef } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { DataContext } from "../context/DataContext";
 import { FaChevronLeft } from "react-icons/fa";
-import Carousel1 from "../components/Carousel1";
-import Carousel2 from "../components/Carousel2";
-import Share from "../components/Share";
-import { createPortal } from "react-dom";
-import useCarousel from "../../hooks/useCarousel";
 import Section from "./Section";
 import SearchResults from "../components/SearchResults";
 import Fuse from "fuse.js";
 import axios from "axios";
+import data from "../../data.json";
 
 export default function Search() {
   const navigate = useNavigate();
@@ -22,17 +18,15 @@ export default function Search() {
   const prevScrollPos = useRef(null);
   const {
     profile,
-    shuffleSearchResults,
-    data,
     saved,
     carouselsLoaded,
     dispatchLoaded,
+    getAxios,
+    fuzzySearch,
   } = useContext(DataContext);
 
   let [filteredData, setFilterData] = useState([]);
-  // shuffleSearchResults ? data[selected].data : data[selected].data;
-  // shuffleSearchResults ? shuffleArray(data) : data
-  // const { handleCarouselSwipe, setTotal } = useCarousel();
+
   const howToLoadData = {
     total: filteredData.length,
     type_: "search",
@@ -40,8 +34,6 @@ export default function Search() {
     dispatchLoaded,
     carouselsLoaded,
   };
-
-  // selected == -1 ? data.flatMap((d) => d.data) : data[selected].data;
 
   function selectResult(item) {
     setFinalQuery(item);
@@ -53,6 +45,7 @@ export default function Search() {
   useEffect(() => {
     if (selected == "videos") dispatchLoaded({ type: "videos", payload: 2 });
   }, [selected]);
+
   useEffect(() => {
     let searchData = [];
 
@@ -80,8 +73,14 @@ export default function Search() {
 
   useEffect(() => {
     dispatchLoaded({ type: "search", payload: 4 });
+    if (fuzzySearch) {
+      let fdata = fuse.current.search(query).map((item) => item.item._id);
+      getAxios("data/f-search", { ids: fdata }).then((res) =>
+        setFilterData(res.data)
+      );
 
-    if (query != "" && profile) {
+      // setFilterData(shuffleSearchResults ? shuffleArray(fdata) : fdata);
+    } else if (query != "" && profile) {
       setFilterData([]);
       axios
         .post(`${import.meta.env.VITE_SERVER}/data/search/${finalQuery}`, {
@@ -136,6 +135,7 @@ export default function Search() {
 
       <Section
         data={filteredData}
+        setData={setFilterData}
         howToLoadData={howToLoadData}
         type_="search"
         setMiniSearchBar={setShowBars}
