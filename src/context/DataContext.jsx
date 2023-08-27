@@ -89,6 +89,7 @@ export default function DataProvider({ children }) {
         fetching.current.saved = 2;
         console.log("fetching saved - from DC");
         setSaved(res.data);
+        setSavedIds(res.data.map((s) => s._id));
       });
     }
     if (fetching.current.profiles == 0) {

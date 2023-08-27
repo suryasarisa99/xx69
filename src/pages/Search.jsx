@@ -16,14 +16,8 @@ export default function Search() {
   const [showBars, setShowBars] = useState(true);
   const [showResults, setShowResults] = useState(false);
   const prevScrollPos = useRef(null);
-  const {
-    profile,
-    saved,
-    carouselsLoaded,
-    dispatchLoaded,
-    getAxios,
-    fuzzySearch,
-  } = useContext(DataContext);
+  const { profile, saved, carouselsLoaded, dispatchLoaded, getAxios, toggles } =
+    useContext(DataContext);
 
   let [filteredData, setFilterData] = useState([]);
 
@@ -73,7 +67,7 @@ export default function Search() {
 
   useEffect(() => {
     dispatchLoaded({ type: "search", payload: 4 });
-    if (fuzzySearch) {
+    if (toggles.fuzzySearch) {
       let fdata = fuse.current.search(query).map((item) => item.item._id);
       getAxios("data/f-search", { ids: fdata }).then((res) =>
         setFilterData(res.data)
