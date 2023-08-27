@@ -46,7 +46,7 @@ export default function DataProvider({ children }) {
   });
   // caroseles Reducer
   const [carouselsLoaded, dispatchLoaded] = useReducer(reducer, {
-    home: 3,
+    home: 4,
     saved: 3,
     search: 3,
     videos: 2,

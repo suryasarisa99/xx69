@@ -9,7 +9,7 @@ import { createPortal } from "react-dom";
 import Suggest from "../components/Suggest";
 import axios from "axios";
 import LoadingCard from "../components/LoadingCard";
-
+import _throttle from "lodash/throttle";
 export default function Section({
   data,
   setData,
@@ -54,13 +54,25 @@ export default function Section({
   const foreCloseOverlay = (e) => {
     document.getElementById("overlay").classList.add("hidden");
   };
-  const handleScroll = () => {
+  const handleScroll = _throttle(() => {
     const currentScrollPos = sectionRef.current.scrollTop;
     // console.log(currentScrollPos, prevScrollPos.current);
-    setShowBars(currentScrollPos < prevScrollPos.current);
-    setMiniSearchBar?.(currentScrollPos < prevScrollPos.current);
+    console.log(
+      `current: ${currentScrollPos}  prv: ${prevScrollPos.current} final: ${
+        currentScrollPos - prevScrollPos.current
+      }`
+    );
+    if (currentScrollPos - prevScrollPos.current > 40) {
+      // scroll down
+      setShowBars(false);
+    }
+    if (currentScrollPos - prevScrollPos.current < -80) {
+      // for scroll up
+      setShowBars(true);
+      // setMiniSearchBar?.(currentScrollPos < prevScrollPos.current);
+    }
     prevScrollPos.current = currentScrollPos;
-  };
+  }, 80);
 
   function showSuggestions({ title, id }) {
     openOverlay();
@@ -168,7 +180,7 @@ export default function Section({
   }
   return (
     <div className="x section">
-      {/* <p>loaded carousels: {carouselsLoaded[type_]}</p> */}
+      <p className="temp">loaded carousels: {carouselsLoaded[type_]}</p>
       <div className="section-carousels" ref={sectionRef}>
         {data.slice(0, carouselsLoaded[type_]).map((item, index) =>
           toggles.isCarousel2 ? (

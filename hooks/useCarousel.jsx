@@ -1,9 +1,7 @@
 import { useState, useContext } from "react";
-import { DataContext } from "../src/context/DataContext";
 
 export default function useCarousel({
   load = 4,
-  initial = 2,
   swipeOnLast = 2,
   carouselsLoaded,
   dispatchLoaded,

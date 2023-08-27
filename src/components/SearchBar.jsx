@@ -2,6 +2,7 @@ import { useEffect, useContext, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { DataContext } from "../context/DataContext";
 import SearchResults from "./SearchResults";
+import { motion } from "framer-motion";
 export default function SearchBar({ type_ }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -62,7 +63,12 @@ export default function SearchBar({ type_ }) {
         />
       </form>
       {type_ == "home" && (
-        <div className="label-buttons">
+        <motion.div
+          className="label-buttons"
+          initial={{ y: -40, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 100 }}
+          transition={{ delay: 0.2, duration: 0.5, ease: "easeIn" }}
+        >
           <div className="l-btn" onClick={() => handleLBtn("trending")}>
             Trending
           </div>
@@ -80,7 +86,7 @@ export default function SearchBar({ type_ }) {
               </div>
             </>
           )}
-        </div>
+        </motion.div>
       )}
       {showResults && <SearchResults name={query} onSelect={handleSearch2} />}
     </div>

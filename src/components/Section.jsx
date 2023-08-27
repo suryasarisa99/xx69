@@ -38,7 +38,6 @@ export default function AiRemover() {
         swipeOnLast: 3,
         total: sectionData.length,
       };
-      S;
       break;
     }
     case "-1": {

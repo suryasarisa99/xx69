@@ -5,7 +5,6 @@ import Section from "./Section";
 export default function Home({ setShowBars }) {
   const { data, setData, carouselsLoaded, dispatchLoaded } =
     useContext(DataContext);
-  let savedData = data;
 
   const howToLoadData = {
     initial: carouselsLoaded.home || 5,
@@ -14,7 +13,6 @@ export default function Home({ setShowBars }) {
     dispatchLoaded,
     swipeOnLast: 3,
     type_: "home",
-    total: savedData.length,
   };
 
   return (

@@ -12,6 +12,7 @@ import Home from "./Home";
 import SearchResults from "../components/SearchResults";
 import SideNav from "../components/SideNav";
 import Profiles from "./Profiles";
+import { motion, AnimatePresence } from "framer-motion";
 export default function X() {
   const navigate = useNavigate();
   const { showBars, setShowBars, signin } = useContext(DataContext);
@@ -47,7 +48,19 @@ export default function X() {
 
   return (
     <div className="x">
-      {showBars && <SearchBar type_={searchType} />}
+      <AnimatePresence>
+        {showBars && (
+          <motion.div
+            initial={{ y: showBars ? -30 : 0 }}
+            animate={{ y: showBars ? -3 : -30 }}
+            // exit={{ y: !showBars ? -30 : 0 }}
+            transition={{ ease: "easeInOut", duration: 0.3 }}
+            className="xyx"
+          >
+            <SearchBar type_={searchType} />
+          </motion.div>
+        )}
+      </AnimatePresence>
       <Routes className="xxx">
         <Route path="*" element={<Home setShowBars={setShowBars} />} />
         <Route path="/videos" element={<Videos setShowBars={setShowBars} />} />
@@ -56,8 +69,24 @@ export default function X() {
         <Route path="/settings" element={<Settings />} />
       </Routes>
       {/* <div className="desktop-nav">hello hi</div> */}
-      {showBars && <BottomNav />}
+      {showBars && (
+        <AnimatePresence>
+          <motion.div
+            className="bottom-xyx"
+            initial={{ y: showBars ? 30 : 0 }}
+            animate={{ y: showBars ? 0 : 30 }}
+            // exit={{ y: !showBars ? 30 : 0 }}
+            // exit={{ opacity: !showBars ? 0 : 100 }}
+            transition={{ ease: "easeInOut", duration: 0.3 }}
+          >
+            <BottomNav />
+          </motion.div>
+        </AnimatePresence>
+      )}
       <SideNav />
     </div>
   );
 }
+
+// initial={{ opacity: showBars ? 0 : 100 }}
+//           transition={{ opacity: showBars ? 100 : 0 }}

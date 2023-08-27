@@ -167,13 +167,18 @@ export default function Carousel({
                 </div>
               )}
               {imgLoaded[index] ? (
-                <img
+                <motion.img
+                  // initial={{ scale: 0.8 }}
+                  // whileInView={{
+                  //   scale: 1,
+                  // }}
+                  // transition={{ duration: 0.6, ease: "easeInOut" }}
                   key={index + id}
                   src={image}
                   alt={item?.name || item?.title || "x-img"}
                   onDoubleClick={handleBigHeart}
                   style={{ objectFit: smallScreen ? "contain" : "cover" }}
-                ></img>
+                ></motion.img>
               ) : (
                 <LoadingImg name={item.name} index={cIndex} />
               )}
