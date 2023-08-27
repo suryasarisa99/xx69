@@ -9,7 +9,7 @@ export default function Home({ setShowBars }) {
 
   const howToLoadData = {
     initial: carouselsLoaded.home || 5,
-    load: 30,
+    load: 4,
     carouselsLoaded,
     dispatchLoaded,
     swipeOnLast: 3,

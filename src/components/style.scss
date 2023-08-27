@@ -96,9 +96,10 @@ body {
     }
     .heart-cover {
       position: absolute;
+      display: inline-block;
       top: 50%;
-      // background-color: rgb(51, 126, 54);
       z-index: 2;
+      filter: drop-shadow(0px 0px 8px rgba(221, 0, 0, 0.698));
     }
     .heart-icon {
       font-size: 50px;
