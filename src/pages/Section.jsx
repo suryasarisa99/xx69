@@ -180,7 +180,9 @@ export default function Section({
   }
   return (
     <div className="x section">
-      <p className="temp">loaded carousels: {carouselsLoaded[type_]}</p>
+      {toggles.devMode && (
+        <p className="temp">loaded carousels: {carouselsLoaded[type_]}</p>
+      )}
       <div className="section-carousels" ref={sectionRef}>
         {data.slice(0, carouselsLoaded[type_]).map((item, index) =>
           toggles.isCarousel2 ? (
