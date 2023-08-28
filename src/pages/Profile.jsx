@@ -17,9 +17,12 @@ export default function Profile() {
     scrollTo({ top: 0, behavior: "instant" });
     async function fetchData() {
       const fData = (
-        await axios.post(`${import.meta.env.VITE_SERVER}/data/search/${name}`, {
-          id: profile._id,
-        })
+        await axios.post(
+          `${import.meta.env.VITE_SERVER}/data/profile/${name}`,
+          {
+            id: profile._id,
+          }
+        )
       ).data;
       console.log(fData);
       const pic = fData?.[Math.floor(Math.random() * fData.length)]?.images[0];
@@ -28,7 +31,7 @@ export default function Profile() {
     }
     fetchData();
     dispatchLoaded({ type: "profile", payload: 2 });
-  }, [name]);
+  }, [name, profile]);
 
   const howToLoadData = {
     initial: carouselsLoaded.profile || 3,

@@ -34,7 +34,7 @@ export default function DataProvider({ children }) {
     shuffleSearchResults: createTg("shuffleSearchResults", false),
     persistantScroll: createTg("persistantScroll", false),
     isCarousel2: createTg("isCarousel2", true),
-    fuzzySearch: createTg("fuzzySearch", false),
+    fuzzySearch: createTg("fuzzySearch", true),
     devMode: createTg("devMode", false),
   });
   // ScrollPos Reducer

@@ -19,8 +19,14 @@ export default function Section({
 }) {
   howToLoadData.total = data.length;
   const { handleCarouselSwipe, setTotal } = useCarousel(howToLoadData);
-  const { scrollPos, carouselsLoaded, setShowBars, toggles } =
-    useContext(DataContext);
+  const {
+    scrollPos,
+    carouselsLoaded,
+    setShowBars,
+    getAxios,
+    toggles,
+    profile,
+  } = useContext(DataContext);
   // const [finalData, setFinalData] = useState([]);
   const [share, setShare] = useState(false);
   const [suggestions, setSuggestions] = useState(false);
@@ -56,12 +62,11 @@ export default function Section({
   };
   const handleScroll = _throttle(() => {
     const currentScrollPos = sectionRef.current.scrollTop;
-    // console.log(currentScrollPos, prevScrollPos.current);
-    console.log(
-      `current: ${currentScrollPos}  prv: ${prevScrollPos.current} final: ${
-        currentScrollPos - prevScrollPos.current
-      }`
-    );
+    // console.log(
+    //   `current: ${currentScrollPos}  prv: ${prevScrollPos.current} final: ${
+    //     currentScrollPos - prevScrollPos.current
+    //   }`
+    // );
     if (currentScrollPos - prevScrollPos.current > 40) {
       // scroll down
       setShowBars(false);
@@ -178,13 +183,14 @@ export default function Section({
       })
     );
   }
+  console.log(data);
   return (
     <div className="x section">
       {toggles.devMode && (
         <p className="temp">loaded carousels: {carouselsLoaded[type_]}</p>
       )}
       <div className="section-carousels" ref={sectionRef}>
-        {data.slice(0, carouselsLoaded[type_]).map((item, index) =>
+        {data?.slice(0, carouselsLoaded[type_]).map((item, index) =>
           toggles.isCarousel2 ? (
             <Carousel2
               key={index}
@@ -199,9 +205,10 @@ export default function Section({
               onSwipe={() => {
                 handleCarouselSwipe(index);
                 if (type_ != "home" || data.length - 1 - index > 8) return;
-                axios.get(`${import.meta.env.VITE_SERVER}/data`).then((res) => {
+
+                getAxios(`data`, { id: profile._id }).then((res) => {
                   console.log(res.data);
-                  setData((prvData) => [...prvData, ...res.data.data]);
+                  setData((prvData) => [...prvData, ...res.data]);
                 });
               }}
             />
@@ -235,7 +242,7 @@ export default function Section({
             <LoadingCard />
           </>
         )}
-        <LoadingCard
+        {/* <LoadingCard
           onSwipe={() => {
             handleCarouselSwipe(9999);
             // if (type_ != "home" || data.length - 1 - index > 8) return;
@@ -244,7 +251,7 @@ export default function Section({
             //   setData((prvData) => [...prvData, ...res.data.data]);
             // });
           }}
-        />
+        /> */}
       </div>
       {share &&
         createPortal(

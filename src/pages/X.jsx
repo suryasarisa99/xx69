@@ -51,9 +51,9 @@ export default function X() {
       <AnimatePresence>
         {showBars && (
           <motion.div
-            initial={{ y: showBars ? -30 : 0 }}
-            animate={{ y: showBars ? -3 : -30 }}
-            // exit={{ y: !showBars ? -30 : 0 }}
+            initial={{ y: -30, opacity: 0 }}
+            animate={{ y: -3, opacity: 1 }}
+            exit={{ y: -80, opacity: 0 }}
             transition={{ ease: "easeInOut", duration: 0.3 }}
             className="xyx"
           >
@@ -69,20 +69,20 @@ export default function X() {
         <Route path="/settings" element={<Settings />} />
       </Routes>
       {/* <div className="desktop-nav">hello hi</div> */}
-      {showBars && (
-        <AnimatePresence>
+      <AnimatePresence>
+        {showBars && (
           <motion.div
             className="bottom-xyx"
-            initial={{ y: showBars ? 30 : 0 }}
-            animate={{ y: showBars ? 0 : 30 }}
-            // exit={{ y: !showBars ? 30 : 0 }}
+            initial={{ y: 30 }}
+            animate={{ y: 0 }}
+            exit={{ y: 30 }}
             // exit={{ opacity: !showBars ? 0 : 100 }}
             transition={{ ease: "easeInOut", duration: 0.3 }}
           >
             <BottomNav />
           </motion.div>
-        </AnimatePresence>
-      )}
+        )}
+      </AnimatePresence>
       <SideNav />
     </div>
   );

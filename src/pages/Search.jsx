@@ -67,10 +67,11 @@ export default function Search() {
 
   useEffect(() => {
     dispatchLoaded({ type: "search", payload: 4 });
+    if (profile == null) return;
     if (toggles.fuzzySearch) {
       let fdata = fuse.current.search(query).map((item) => item.item._id);
-      getAxios("data/f-search", { ids: fdata }).then((res) =>
-        setFilterData(res.data)
+      getAxios("data/f-search", { ids: fdata, accId: profile._id }).then(
+        (res) => setFilterData(res.data)
       );
 
       // setFilterData(shuffleSearchResults ? shuffleArray(fdata) : fdata);

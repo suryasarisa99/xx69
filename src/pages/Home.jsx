@@ -16,7 +16,7 @@ export default function Home({ setShowBars }) {
   };
 
   return (
-    <div>
+    <div className="home">
       <Section
         setShowBars={setShowBars}
         data={data}
