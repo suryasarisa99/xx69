@@ -24,14 +24,15 @@ body {
   width: 100%;
   background-color: black;
 }
-
-.carousel {
+.post {
   background-color: black;
   margin-bottom: 15px;
   border-radius: 15px;
   padding-top: 4px;
   user-select: none;
+}
 
+.carousel {
   img {
     min-height: 250px;
     width: 100%;
@@ -59,6 +60,24 @@ body {
 
 .carousel1 {
   overflow: hidden;
+
+  .images-container {
+    display: flex;
+    align-items: stretch;
+
+    .img-box {
+      flex-shrink: 0;
+      width: 100%;
+      flex-shrink: 0;
+      justify-content: center;
+      position: relative;
+      display: flex;
+      align-items: stretch;
+    }
+    img {
+      object-fit: cover;
+    }
+  }
 }
 
 .carousel2 {
@@ -126,7 +145,7 @@ body {
   }
 
   .dots {
-    bottom: 52px;
+    bottom: -15px;
   }
 }
 .temp {
@@ -479,6 +498,7 @@ body {
   }
   .settings {
     user-select: none;
+    padding-bottom: 60px;
     .section {
       padding-top: 35px;
     }
@@ -558,7 +578,7 @@ body {
 .home {
   margin-top: 0;
 }
-.home .x.section .section-carousels .carousel.carousel:first-child {
+.home .x.section .section-carousels .post:first-child {
   padding-top: 85px;
 }
 .x.section {
@@ -566,10 +586,8 @@ body {
     height: 100vh;
     overflow-y: scroll;
 
-    .carousel:first-child {
+    .post:first-child {
       padding-top: 55px;
-      // scroll-snap-align: start;
-      // scroll-margin-top: 20px;
     }
     .carousel:last-child {
       padding-bottom: 30px;
@@ -578,7 +596,7 @@ body {
 }
 
 .suggestions {
-  background-color: rgb(34, 34, 34);
+  background-color: rgb(23, 20, 20);
   color: white;
   position: absolute;
   width: 95%;
@@ -592,16 +610,30 @@ body {
   overflow: auto;
   .name {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    padding: 4px;
+    padding: 4px 15px;
+    color: rgb(237, 14, 211);
+    font-weight: 600;
+    font-size: 20px;
+
+    .items {
+      display: flex;
+      gap: 3px;
+      button {
+        // background-color: black;
+        border: none;
+        padding: 2px 10px;
+        background-color: transparent;
+      }
+    }
   }
   .fuzzy-results {
     margin-bottom: 10px;
     padding: 5px 15px;
     border-radius: 10px;
-    background-color: rgb(33, 61, 47);
-    max-height: 174px;
+    // background-color: rgb(15, 25, 20);
+    max-height: 165px;
     overflow: auto;
   }
   .title {
@@ -611,15 +643,16 @@ body {
   }
   .normal-results {
     @extend .fuzzy-results;
-    background-color: rgb(67, 53, 29);
+    // background-color: rgb(67, 53, 29);
   }
 
   input {
     font-size: 20px;
     padding: 4px 10px;
-    width: 100%;
+    margin: 0px 20px;
+    width: 90%;
     margin-bottom: 10px;
-    background-color: rgb(65, 65, 65);
+    background-color: rgb(35, 35, 35);
   }
 
   .sugg-item {
@@ -632,7 +665,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 14px;
+    font-size: 16px;
     // background-color: green;
 
     .items {

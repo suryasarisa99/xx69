@@ -74,7 +74,7 @@ export default function Suggest({ name, onSelect }) {
   return (
     <div className="suggestions" onClick={(e) => e.stopPropagation()}>
       <div className="name">
-        <p>Name: {name}</p>
+        <p>{name}</p>
         <Items name={name} />
       </div>
       <form

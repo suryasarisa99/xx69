@@ -63,7 +63,10 @@ export default function BottomNav() {
     // console.log(location.pathname);
   }, [location.pathname]);
   const Home =
-    location.pathname == "/" || location.pathname == "/x/home"
+    location.pathname == "/" ||
+    location.pathname == "/x/" ||
+    location.pathname == "/x" ||
+    location.pathname == "/x/home"
       ? AiFillHome
       : AiOutlineHome;
   const Videos = location.pathname == "/x/videos" ? BsPlayBtnFill : BsPlayBtn;

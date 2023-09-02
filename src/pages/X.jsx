@@ -42,6 +42,8 @@ export default function X() {
       searchType = "gifs";
       break;
     case "/":
+    case "/x":
+    case "/x/":
     case "/x/home":
       searchType = "home";
   }

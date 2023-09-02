@@ -8,7 +8,7 @@ import Fuse from "fuse.js";
 import axios from "axios";
 import data from "../../data.json";
 
-export default function Search() {
+export default function Search({ type_ }) {
   const navigate = useNavigate();
   const { query: q, selected } = useParams();
   const [query, setQuery] = useState(q);
@@ -69,21 +69,35 @@ export default function Search() {
     dispatchLoaded({ type: "search", payload: 4 });
     if (profile == null) return;
     if (toggles.fuzzySearch) {
-      let fdata = fuse.current.search(query).map((item) => item.item._id);
-      getAxios("data/f-search", { ids: fdata, accId: profile._id }).then(
-        (res) => setFilterData(res.data)
-      );
+      let home = ["/x/home" || "/x" || "/"];
+      if (selected == "home") {
+        let fdata = fuse.current.search(query).map((item) => item.item._id);
+        getAxios("data/f-search", { ids: fdata, accId: profile._id }).then(
+          (res) => setFilterData(res.data)
+        );
+      } else if (selected == "saved") {
+        let savedFuse = new Fuse(saved, {
+          keys: ["name", "title"],
+          includeScore: true,
+          threshold: 0.4,
+        });
+        let fdata = savedFuse.search(query).map((item) => item.item);
+        console.log(fdata);
+        setFilterData(fdata);
+      }
 
       // setFilterData(shuffleSearchResults ? shuffleArray(fdata) : fdata);
     } else if (query != "" && profile) {
       setFilterData([]);
-      axios
-        .post(`${import.meta.env.VITE_SERVER}/data/search/${finalQuery}`, {
-          id: profile._id,
-        })
-        .then((res) => setFilterData(res.data));
+      if (selected == "home") {
+        axios
+          .post(`${import.meta.env.VITE_SERVER}/data/search/${finalQuery}`, {
+            id: profile._id,
+          })
+          .then((res) => setFilterData(res.data));
+      }
     }
-  }, [finalQuery, profile]);
+  }, [finalQuery, profile, saved]);
 
   const handleScroll = () => {
     const currentScrollPos = window.scrollY;

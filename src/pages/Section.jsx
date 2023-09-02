@@ -7,6 +7,7 @@ import useCarousel from "../../hooks/useCarousel";
 import Share from "../components/Share";
 import { createPortal } from "react-dom";
 import Suggest from "../components/Suggest";
+import Post from "../components/Post";
 import axios from "axios";
 import LoadingCard from "../components/LoadingCard";
 import _throttle from "lodash/throttle";
@@ -190,51 +191,29 @@ export default function Section({
         <p className="temp">loaded carousels: {carouselsLoaded[type_]}</p>
       )}
       <div className="section-carousels" ref={sectionRef}>
-        {data?.slice(0, carouselsLoaded[type_]).map((item, index) =>
-          toggles.isCarousel2 ? (
-            <Carousel2
-              key={index}
-              type_={type_}
-              onShare={showShare}
-              showSuggestions={showSuggestions}
-              id={item._id}
-              addLike={addLike}
-              removeLike={removeLike}
-              item={item}
-              cIndex={index}
-              onSwipe={() => {
-                handleCarouselSwipe(index);
-                if (type_ != "home" || data.length - 1 - index > 8) return;
+        {data?.slice(0, carouselsLoaded[type_]).map((item, index) => (
+          <Post
+            key={index}
+            type_={type_}
+            onShare={showShare}
+            showSuggestions={showSuggestions}
+            id={item._id}
+            addLike={addLike}
+            removeLike={removeLike}
+            item={item}
+            cIndex={index}
+            onSwipe={() => {
+              handleCarouselSwipe(index);
 
-                getAxios(`data`, { id: profile._id }).then((res) => {
-                  console.log(res.data);
-                  setData((prvData) => [...prvData, ...res.data]);
-                });
-              }}
-            />
-          ) : (
-            <Carousel1
-              key={index}
-              type_={type_}
-              onShare={showShare}
-              id={item._id}
-              images={item?.images}
-              name={item?.name}
-              title={item?.title}
-              onSwipe={() => {
-                handleCarouselSwipe(index);
-                console.log(
-                  `conditon: ${type_ != "home" || data.length - 1 - index > 8}`
-                );
-                if (type_ != "home" || data.length - 1 - index > 8) return;
-                console.log("<== Data is ADDEd ==>");
-                axios
-                  .get(`${import.meta.evn.VITE_SERVER}/data`)
-                  .then((res) => setData((prvData) => [...prvData, res.data]));
-              }}
-            />
-          )
-        )}
+              if (type_ != "home" || data.length - 1 - index > 8) return;
+
+              getAxios(`data`, { id: profile._id }).then((res) => {
+                console.log(res.data);
+                setData((prvData) => [...prvData, ...res.data]);
+              });
+            }}
+          />
+        ))}
         {data.length == 0 && (
           <>
             <LoadingCard />

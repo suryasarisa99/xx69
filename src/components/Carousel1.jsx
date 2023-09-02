@@ -1,78 +1,46 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { DataContext } from "../context/DataContext";
 import { useNavigate } from "react-router-dom";
-import { FaRegBookmark, FaBookmark } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 import { BsShareFill, BsArrowsFullscreen } from "react-icons/bs";
+import LoadingImg from "./LoadingImg";
 import { motion } from "framer-motion";
 import "./style.scss";
 export default function Carousel({
-  images: imagesX,
-  name,
+  p: { item, id, selected, setSelected, len, smallScreen },
   onSwipe,
-  onShare,
-  id,
+  cIndex,
+  handleBigHeart,
+  imgLoaded,
+  heart,
+  SM,
   type,
-  removeCarouselFromSaved,
 }) {
   let [pos, setPos] = useState(0);
-  const navigate = useNavigate();
-  const { slide, lastImg, reverseOrder, saved, setSaved, scrollPos, dispatch } =
-    useContext(DataContext);
-  let [isSaved, setIsSaved] = useState(saved.includes(id));
-  let [temp, setTemp] = useState(0);
-  let [largeCarousel, setLargeCarousel] = useState(false);
+  const { toggles } = useContext(DataContext);
   let limit = 50;
 
   let [images, setImages] = useState(
-    reverseOrder ? [...imagesX].reverse() : imagesX
+    toggles.reverseOrder ? [...item.images].reverse() : item.images
   );
-
-  let [selected, setSelected] = useState(lastImg ? images.length - 1 : 0);
 
   const start = useRef(null);
   const startY = useRef(null);
-  const imgsRef = useRef(null);
 
-  useEffect(() => {
-    imgsRef.current.querySelectorAll("img").forEach((img) => {
-      img.addEventListener("load", () => {
-        setTemp(img.height);
-        if (img.height > 700) {
-          setLargeCarousel(true);
-          img.style.height = "700px";
-          img.style.objectFit = "cover";
-          imgsRef.current.classList.add("large-carousel");
-          img.classList.add("large-img");
-        }
-      });
-    });
-  }, []);
   // useEffect(() => {
-  //   const handleImageLoad = (img) => {
-  //     setTemp(img.height);
-  //     if (img.height > 750) {
-  //       setLargeCarousel(true);
-  //       imgsRef.current.classList.add("large-carousel");
-  //       img.classList.add("large-img");
-  //     }
-  //   };
-
-  //   const imgLoadListeners = [];
-
   //   imgsRef.current.querySelectorAll("img").forEach((img) => {
-  //     const loadListener = () => handleImageLoad(img);
-  //     img.addEventListener("load", loadListener);
-  //     imgLoadListeners.push({ img, loadListener });
-  //   });
-
-  //   return () => {
-  //     imgLoadListeners.forEach(({ img, loadListener }) => {
-  //       loadListener();
-  //       img.removeEventListener("load", loadListener);
+  //     img.addEventListener("load", () => {
+  //       setTemp(img.height);
+  //       if (img.height > 700) {
+  //         setLargeCarousel(true);
+  //         img.style.height = "700px";
+  //         img.style.objectFit = "cover";
+  //         imgsRef.current.classList.add("large-carousel");
+  //         img.classList.add("large-img");
+  //       }
   //     });
-  //   };
+  //   });
   // }, []);
-  // function handleImgLoad() {}
 
   if (!images || images.length == 0) return null;
   const handleTS = (e) => {
@@ -102,19 +70,7 @@ export default function Carousel({
     setPos(0);
     start.current = 0;
   };
-  const onDotClick = (index) => {
-    setSelected(index);
-  };
-  const addBookMark = () => {
-    setIsSaved(true);
-    setSaved((prv) => [...prv, id]);
-  };
-  const removeBookMark = () => {
-    setIsSaved(false);
-    saved.splice(saved.indexOf(id), 1);
-    setSaved([...saved]);
-    if (type == "saved") removeCarouselFromSaved(id);
-  };
+
   let calc = `calc(${pos}px + -${selected}00%)`;
 
   return (
@@ -122,27 +78,45 @@ export default function Carousel({
       className="carousel1 carousel"
       onTouchStart={onSwipe}
       onMouseOverCapture={onSwipe}
-      ref={imgsRef}
+      // ref={imgsRef}
     >
       <div className="images-container">
         {images.map((image, index) => {
           return (
-            // <div key={index + id} className="img-box">
-            <img
-              key={index + id}
-              src={image}
-              alt="man"
-              style={{
-                transform: slide
-                  ? `translateX(${pos != 0 ? calc : -1 * selected + "00%"})`
-                  : `translateX(-${selected}00%)`,
-              }}
-              onTouchStart={handleTS}
-              onTouchMove={handleTM}
-              onTouchEnd={handleTE}
-              loading="lazy"
-            />
-            //</div>
+            <div key={index + id} className="img-box">
+              {imgLoaded[index] ? (
+                <motion.img
+                  initial={{}}
+                  animate={{}}
+                  key={index + id}
+                  src={image}
+                  alt={item.name || item.title || "x"}
+                  style={{
+                    transform: toggles.slide
+                      ? `translateX(${pos != 0 ? calc : -1 * selected + "00%"})`
+                      : `translateX(-${selected}00%)`,
+                    objectFit: smallScreen ? "contain" : "cover",
+                  }}
+                  onTouchStart={handleTS}
+                  onTouchMove={handleTM}
+                  onTouchEnd={handleTE}
+                  onDoubleClick={handleBigHeart}
+                />
+              ) : (
+                <LoadingImg name={item.name} index={cIndex} />
+              )}
+              {heart && (
+                <motion.div
+                  className="heart-cover"
+                  initial={{ scale: heart ? 1.4 : 0 }}
+                  animate={{
+                    scale: heart ? (SM ? 2.3 : 2.8) : 0,
+                  }}
+                >
+                  <FaHeart className="heart-icon" />
+                </motion.div>
+              )}
+            </div>
           );
         })}
         {images.length > 1 && (
@@ -152,38 +126,13 @@ export default function Carousel({
                 <Dot
                   key={index}
                   selected={selected == index}
-                  onClick={onDotClick}
+                  onClick={() => setSelected(index)}
                   index={index}
                 />
               );
             })}
           </div>
         )}
-      </div>
-      <div className="top">
-        <div className="name">{name}</div>
-        <div className="icons">
-          {largeCarousel && (
-            <BsArrowsFullscreen
-              className="full-screen-icon"
-              onClick={() => {
-                dispatch({ type: "home", payload: window.scrollY });
-                navigate("/large/" + id);
-              }}
-            />
-          )}
-          <BsShareFill
-            className="share-icon"
-            onClick={() => onShare({ id, name })}
-          />
-          <motion.div initial={{ scale: 1 }} whileTap={{ scale: 1.5 }}>
-            {isSaved ? (
-              <FaBookmark className="bookmark" onClick={removeBookMark} />
-            ) : (
-              <FaRegBookmark className="bookmark" onClick={addBookMark} />
-            )}
-          </motion.div>
-        </div>
       </div>
     </div>
   );
