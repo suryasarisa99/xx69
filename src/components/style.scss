@@ -818,9 +818,8 @@ body {
   }
 }
 .profiles {
-  padding: 15px;
-  padding-top: 75px;
   color: white;
+  padding: 75px 15px;
 
   .flex-items {
     display: flex;
@@ -849,6 +848,47 @@ body {
     .name {
     }
     .count {
+    }
+  }
+  background-color: rgb(23, 23, 23);
+  .profile-item2 {
+    display: flex;
+    gap: 30px;
+    background-color: black;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 15px;
+
+    .img-box {
+      border-radius: 20%;
+      height: 120px;
+      width: 120px;
+      position: relative;
+      overflow: hidden;
+      background-color: rgb(48, 48, 48);
+    }
+    img {
+      position: absolute;
+      object-fit: cover;
+      left: 0;
+      width: 100%;
+      top: -5px;
+    }
+
+    .about {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+
+      .name {
+        font-size: 19px;
+      }
+      .count-value {
+        padding: 4px 8px;
+        border-radius: 8px;
+        margin-left: 10px;
+        background-color: rgb(53, 53, 53);
+      }
     }
   }
 }

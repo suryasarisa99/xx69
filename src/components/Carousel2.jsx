@@ -5,6 +5,9 @@ import "./style.scss";
 import _throttle from "lodash/throttle";
 import { motion } from "framer-motion";
 import LoadingImg from "./LoadingImg";
+import storage from "../../firebaseConfig.js";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import Resizer from "react-image-file-resizer";
 export default function Carousel({
   p: { item, id, selected, setSelected, len, smallScreen },
   onSwipe,
@@ -14,13 +17,13 @@ export default function Carousel({
   heart,
   SM,
 }) {
-  const { toggles } = useContext(DataContext);
+  const { toggles, getAxios } = useContext(DataContext);
 
   const imgConRef = useRef(null);
   let [images, setImages] = useState(
     toggles.reverseOrder ? [...item.images].reverse() : item.images
   );
-
+  const [file, setFile] = useState(null);
   useEffect(() => {
     imgConRef.current?.addEventListener("scroll", updateDotOnScroll);
     // imgConRef.current?.addEventListener("scroll", _throttle(test, 1));
@@ -65,14 +68,14 @@ export default function Carousel({
         {images.map((image, index) => {
           return (
             <div key={index + id} className="img-box">
-              {toggles.devMode && (
+              {/* {toggles.devMode && (
                 <div className="temp">
                   <p>
                     h: {len[index].h} || w: {len[index].w} || r:{" "}
                     {len[index].h / len[index].w}
                   </p>
                 </div>
-              )}
+              )} */}
               {imgLoaded[index] ? (
                 <motion.img
                   key={index + id}
@@ -116,6 +119,7 @@ export default function Carousel({
           </div>
         )}
       </div>
+      {file && <img src={file} alt="x" />}
     </div>
   );
 }

@@ -6,6 +6,8 @@ import { BsShareFill } from "react-icons/bs";
 import "./style.scss";
 import _throttle from "lodash/throttle";
 import { motion, AnimatePresence } from "framer-motion";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import storage from "../../firebaseConfig.js";
 
 export default function PostBottom({
   p: { item, id, selected, setSelected, len, smallScreen },
@@ -16,23 +18,51 @@ export default function PostBottom({
   showSuggestions,
   likeRef,
 }) {
-  const { profile, setSaved, getAxios, savedIds, setSavedIds } =
-    useContext(DataContext);
+  const {
+    profile,
+    profiles,
+    setSaved,
+    getAxios,
+    savedIds,
+    setSavedIds,
+    toggles,
+    setProfiles,
+  } = useContext(DataContext);
   let [like, setLike] = useState(item.likeStatus);
   let [likesCount, setLikesCount] = useState(item.likes);
 
   let [isSaved, setIsSaved] = useState(savedIds.includes(item._id));
-  const addBookMark = () => {
+  const addBookMark = (e) => {
+    e.stopPropagation();
     setIsSaved(true);
     getAxios("data/save", { id: profile._id, savedId: id });
     setSaved((prv) => [...prv, item]);
     setSavedIds((prv) => [...prv, id]);
   };
-  const removeBookMark = () => {
+  const removeBookMark = (e) => {
+    e.stopPropagation();
     getAxios("data/unsave", { id: profile._id, savedId: id });
     setIsSaved(false);
     setSaved((prv) => prv.filter((s) => s._id != id));
     setSavedIds((prv) => prv.filter((sid) => sid != id));
+  };
+  const uploadToFireBase = async (imageSrc) => {
+    const res = await fetch(imageSrc);
+    const imageBlob = await res.blob();
+    const timestamp = new Date().getTime();
+    const fileName = `${item.name}_r160.jpg`;
+    let ImgRef = ref(storage, `dps/${fileName}`);
+    uploadBytes(ImgRef, imageBlob).then((res) => {
+      console.log(res);
+    });
+  };
+
+  const handleUpload = async (img) => {
+    getAxios("data/red-quality", { img, name: item.name }).then((res) => {
+      console.log(res.data);
+      const imageSrc = `data:${res.data.contentType};base64,${res.data.base64Data}`;
+      uploadToFireBase(imageSrc);
+    });
   };
   return (
     <div>
@@ -51,18 +81,18 @@ export default function PostBottom({
           )}
         </div>
         <div className="icons">
-          {/* {
+          {toggles.devMode && item.name && (
             <p
-              onClick={(e) => {
-                console.log("clicked");
-                getAxios("data/dp", {
-                  dp: item.images[selected],
-                }).then((res) => console.log(res.data));
+              onClick={() => {
+                handleUpload(item.images[selected]);
+                // let p = profiles.find((item) => item.name == item.name);
+                // p.images = item.name;
+                // setProfiles((prv) => [...prv]);
               }}
             >
               dp
             </p>
-          } */}
+          )}
           <AnimatePresence>
             {item.images.length > 0 && len[selected].show && (
               <motion.div

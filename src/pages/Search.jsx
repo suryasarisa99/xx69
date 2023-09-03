@@ -60,8 +60,7 @@ export default function Search({ type_ }) {
     console.log(searchData);
     fuse.current = new Fuse(searchData, {
       keys: ["name", "title"],
-      includeScore: true,
-      threshold: 0.4,
+      threshold: 0.3,
     });
   }, [data]);
 
@@ -97,7 +96,7 @@ export default function Search({ type_ }) {
           .then((res) => setFilterData(res.data));
       }
     }
-  }, [finalQuery, profile, saved]);
+  }, [finalQuery, profile]);
 
   const handleScroll = () => {
     const currentScrollPos = window.scrollY;

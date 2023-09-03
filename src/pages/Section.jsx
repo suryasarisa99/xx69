@@ -187,9 +187,9 @@ export default function Section({
   console.log(data);
   return (
     <div className="x section">
-      {toggles.devMode && (
+      {/* {toggles.devMode && (
         <p className="temp">loaded carousels: {carouselsLoaded[type_]}</p>
-      )}
+      )} */}
       <div className="section-carousels" ref={sectionRef}>
         {data?.slice(0, carouselsLoaded[type_]).map((item, index) => (
           <Post
