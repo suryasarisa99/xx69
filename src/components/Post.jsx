@@ -11,6 +11,8 @@ import LoadingImg from "./LoadingImg";
 import Carousel1 from "./Carousel1";
 import Carousel2 from "./Carousel2";
 import PostBottom from "./PostBottom";
+import storage from "../../firebaseConfig.js";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 export default function Post({
   onSwipe,
   onShare,
@@ -36,6 +38,7 @@ export default function Post({
   );
 
   const dotClickRef = useRef(false);
+  let [imgUrl, setImgUrl] = useState();
 
   let [selected, setSelected] = useState(0);
   let [len, setLen] = useState(
@@ -70,6 +73,20 @@ export default function Post({
     //   }
     // }
   }
+
+  function getImg(imgName) {
+    let ImgRef = ref(storage, `dps/${imgName}`);
+    getDownloadURL(ImgRef).then((url) => {
+      setImgUrl(url);
+      console.log(url);
+    });
+  }
+
+  useEffect(() => {
+    if (item.images) {
+      getImg(item.name + "_r160.jpg");
+    }
+  }, [item.images, item.name]);
 
   function AINF() {
     // All Images Not Found
@@ -141,6 +158,26 @@ export default function Post({
   };
   return (
     <div className="post">
+      <div className="top-profile-bar">
+        <div className="pink-border">
+          <div className="img-box">
+            <img src={imgUrl} alt="" />
+          </div>
+        </div>
+        <div
+          onClick={() =>
+            showSuggestions({ title: item?.name || item?.title, id })
+          }
+        >
+          {item?.name && <div className="name">{item.name}</div>}
+          {!item?.name && item.title && (
+            <div className="title">{item?.title}</div>
+          )}
+          {!item?.name && !item?.title && (
+            <div className="no-name">No Name </div>
+          )}
+        </div>
+      </div>
       {toggles.isCarousel2 ? (
         <Carousel2
           p={p}

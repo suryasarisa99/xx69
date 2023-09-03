@@ -30,6 +30,56 @@ body {
   border-radius: 15px;
   padding-top: 4px;
   user-select: none;
+
+  .top-profile-bar {
+    padding: 5px 15px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+
+    .pink-border {
+      border: 1.5px solid rgb(255, 9, 239);
+      border-radius: 50%;
+      padding: 2px;
+    }
+    .img-box {
+      width: 40px;
+      height: 40px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 50%;
+      // border: 1px solid rgb(255, 0, 247);
+      padding: 3px;
+
+      img {
+        width: 100%;
+        position: absolute;
+
+        left: 0;
+        top: 0px;
+        object-fit: cover;
+      }
+    }
+    .name {
+      background: linear-gradient(45deg, rgb(221, 0, 188), rgb(152, 0, 228));
+
+      padding: 4px 15px;
+      border-radius: 8px;
+    }
+    .no-name {
+      background: linear-gradient(45deg, rgb(161, 0, 40), rgb(200, 77, 0));
+      padding: 6px 12px;
+      border-radius: 10px;
+      margin-left: 12px;
+    }
+    .title {
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 200px;
+      text-overflow: ellipsis;
+    }
+  }
 }
 
 .carousel {
@@ -104,6 +154,7 @@ body {
       position: relative;
       display: flex;
       align-items: stretch;
+      max-height: 660px;
       // background: url("https://i.ibb.co/mqmMjmX/00826-1408492277-Jai-Fakes-standard-scale-4-00x.jpg");
       // align-items: center;
       // backdrop-filter: blur(100px);
@@ -310,13 +361,12 @@ body {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 20px;
   padding-left: 5px;
+  padding: 14px 25px;
   align-items: center;
 
   .name {
     text-align: left;
-    // white-space: nowrap;
     overflow: hidden;
     padding: 5px 10px;
     margin-left: 10px;
@@ -324,26 +374,11 @@ body {
     background: linear-gradient(45deg, rgb(221, 0, 188), rgb(152, 0, 228));
     max-width: 200px;
     color: white;
-    // text-overflow: ellipsis;
   }
-  .no-name {
-    // background-color: rgb(161, 0, 40);
-    background: linear-gradient(45deg, rgb(161, 0, 40), rgb(200, 77, 0));
-    padding: 6px 12px;
-    border-radius: 10px;
-    margin-left: 12px;
-  }
-  .title {
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 200px;
-    text-overflow: ellipsis;
-  }
-  .icons {
+
+  .left-icons {
     display: flex;
-    gap: 14px;
-    padding: 3px;
+    gap: 18px;
     align-items: center;
     .icon {
       font-size: 26px;
@@ -372,17 +407,23 @@ body {
       bottom: -8px;
       left: -2px;
     }
-    .bookmark {
-      color: white;
-      // padding: 20px;
-      // margin-left: 20px;
-      font-size: 22px;
-    }
+
     .share-icon {
       color: white;
 
       font-size: 18px;
     }
+  }
+}
+.right-icons {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  .bookmark {
+    color: white;
+    // padding: 20px;
+    // margin-left: 20px;
+    font-size: 22px;
   }
 }
 
@@ -460,6 +501,10 @@ body {
       padding-top: 0;
       overflow-x: auto;
       margin-top: -2px;
+      scrollbar-width: 0px;
+      &::-webkit-scrollbar {
+        display: none;
+      }
 
       z-index: -1;
       // cursor: pointer;
@@ -535,7 +580,6 @@ body {
   bottom: 0px;
   background-color: black;
   padding: 5px 25px;
-  border-top: 1px solid gray;
   .icons {
     button {
       padding: 8px 12px;

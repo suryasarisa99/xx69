@@ -67,50 +67,7 @@ export default function PostBottom({
   return (
     <div>
       <div className="top">
-        <div
-          onClick={() =>
-            showSuggestions({ title: item?.name || item?.title, id })
-          }
-        >
-          {item?.name && <div className="name">{item.name}</div>}
-          {!item?.name && item.title && (
-            <div className="title">{item?.title}</div>
-          )}
-          {!item?.name && !item?.title && (
-            <div className="no-name">No Name </div>
-          )}
-        </div>
-        <div className="icons">
-          {toggles.devMode && item.name && (
-            <p
-              onClick={() => {
-                handleUpload(item.images[selected]);
-                // let p = profiles.find((item) => item.name == item.name);
-                // p.images = item.name;
-                // setProfiles((prv) => [...prv]);
-              }}
-            >
-              dp
-            </p>
-          )}
-          <AnimatePresence>
-            {item.images.length > 0 && len[selected].show && (
-              <motion.div
-                initial={{ scale: 0.4 }}
-                whileInView={{ scale: 1.2 }}
-                exit={{ scale: 0 }}
-                transition={{ duration: 0.2, ease: "easeInOut" }}
-                whileTap={{ scale: 1.3 }}
-                onClick={() => setSmallScreen((prv) => !prv)}
-              >
-                {smallScreen ? (
-                  <RxEnterFullScreen className="icon small-screen" />
-                ) : (
-                  <RxExitFullScreen className="icon small-screen" />
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
+        <div className="left-icons">
           <motion.div whileTap={{ scale: 1.3 }} className="likes-box">
             {likesCount != 0 && <p className="likes-count">{likesCount}</p>}
 
@@ -142,6 +99,36 @@ export default function PostBottom({
             className="share-icon"
             onClick={() => onShare({ id, name: item?.name || item?.title })}
           />
+          <AnimatePresence>
+            {item.images.length > 0 && len[selected].show && (
+              <motion.div
+                initial={{ scale: 0.4 }}
+                whileInView={{ scale: 1.2 }}
+                exit={{ scale: 0 }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
+                whileTap={{ scale: 1.3 }}
+                onClick={() => setSmallScreen((prv) => !prv)}
+              >
+                {smallScreen ? (
+                  <RxEnterFullScreen className="icon small-screen" />
+                ) : (
+                  <RxExitFullScreen className="icon small-screen" />
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <div className="right-icons">
+          {toggles.devMode && item.name && (
+            <p
+              onClick={() => {
+                handleUpload(item.images[selected]);
+              }}
+            >
+              dp
+            </p>
+          )}
           <motion.div whileTap={{ scale: 1.3 }}>
             {isSaved ? (
               <FaBookmark className="bookmark" onClick={removeBookMark} />
