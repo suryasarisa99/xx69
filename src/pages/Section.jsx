@@ -11,6 +11,7 @@ import Post from "../components/Post";
 import axios from "axios";
 import LoadingCard from "../components/LoadingCard";
 import _throttle from "lodash/throttle";
+import ProfileCard from "../components/ProfileCard";
 export default function Section({
   data,
   setData,
@@ -31,7 +32,9 @@ export default function Section({
   // const [finalData, setFinalData] = useState([]);
   const [share, setShare] = useState(false);
   const [suggestions, setSuggestions] = useState(false);
+  const [showProfileCard, setShowProfileCard] = useState(false);
   const [suggName, setSuggName] = useState("");
+  const [imgUrl, setImgUrl] = useState();
   const [id, setId] = useState(-1);
   const shareIdRef = useRef(null);
   const navigate = useNavigate();
@@ -51,14 +54,17 @@ export default function Section({
     console.log(e);
     if (
       !document.querySelector(".suggestions")?.contains(e.target) &&
-      !document.querySelector(".share")?.contains(e.target)
+      !document.querySelector(".share")?.contains(e.target) &&
+      !document.querySelector(".profile-card")?.contains(e.target)
     ) {
       setShare(false);
       setSuggestions(false);
+      setShowProfileCard(false);
       document.getElementById("overlay").classList.add("hidden");
     }
   };
   const foreCloseOverlay = (e) => {
+    console.log("close ---");
     document.getElementById("overlay").classList.add("hidden");
   };
   const handleScroll = _throttle(() => {
@@ -80,11 +86,20 @@ export default function Section({
     prevScrollPos.current = currentScrollPos;
   }, 80);
 
-  function showSuggestions({ title, id }) {
+  function showSuggestions({ title, id, img }) {
     openOverlay();
     setSuggestions(true);
     setSuggName(title);
     setId(id);
+    setImgUrl(img);
+  }
+
+  function openProfileCard({ title, id, img }) {
+    openOverlay();
+    setShowProfileCard(true);
+    setSuggName(title);
+    setId(id);
+    setImgUrl(img);
   }
 
   function selectSuggestion(name) {
@@ -197,6 +212,7 @@ export default function Section({
             type_={type_}
             onShare={showShare}
             showSuggestions={showSuggestions}
+            showProfile={openProfileCard}
             id={item._id}
             addLike={addLike}
             removeLike={removeLike}
@@ -243,7 +259,17 @@ export default function Section({
         )}
       {suggestions &&
         createPortal(
-          <Suggest name={suggName} onSelect={selectSuggestion} />,
+          <Suggest name={suggName} onSelect={selectSuggestion} img={imgUrl} />,
+          document.getElementById("overlay")
+        )}
+
+      {showProfileCard &&
+        createPortal(
+          <ProfileCard
+            name={suggName}
+            img={imgUrl}
+            forceClose={foreCloseOverlay}
+          />,
           document.getElementById("overlay")
         )}
     </div>

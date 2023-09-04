@@ -24,6 +24,58 @@ body {
   width: 100%;
   background-color: black;
 }
+.profile-card {
+  background-color: rgb(27, 27, 27);
+  top: 20%;
+  left: 50%;
+  translate: -50% 0;
+  padding: 18px 22px;
+  border-radius: 12px;
+
+  position: absolute;
+  z-index: 3;
+  min-width: 400px;
+
+  max-width: 600px;
+  .name {
+    font-size: 20px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: rgb(255, 0, 212);
+  }
+  .flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .img-box {
+      width: 180px;
+      height: 180px;
+      overflow: hidden;
+      position: relative;
+      border-radius: 8px;
+
+      img {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      button {
+        border: none;
+        padding: 8px 15px;
+        color: rgb(255, 187, 255);
+        background: linear-gradient(45deg, rgb(255, 0, 195), rgb(195, 0, 255));
+      }
+    }
+  }
+}
 .post {
   background-color: black;
   margin-bottom: 15px;
@@ -506,7 +558,7 @@ body {
         display: none;
       }
 
-      z-index: -1;
+      z-index: 3;
       // cursor: pointer;
       background-color: rgb(0, 0, 0);
       // justify-content: space-between;
@@ -641,22 +693,24 @@ body {
 
 .suggestions {
   background-color: rgb(23, 20, 20);
+  overflow-x: hidden;
   color: white;
   position: absolute;
   width: 95%;
-  top: 15%;
+  top: 60px;
   left: 50%;
   transform: translateX(-50%);
   padding: 8px 6px 8px 6px;
   border-radius: 10px;
   max-height: 700px;
-  z-index: 3;
+  z-index: 5;
   overflow: auto;
   .name {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 4px 15px;
+    padding-left: 35px;
     color: rgb(237, 14, 211);
     font-weight: 600;
     font-size: 20px;
@@ -671,6 +725,9 @@ body {
         background-color: transparent;
       }
     }
+  }
+  button .right-arrow {
+    font-size: 16px;
   }
   .fuzzy-results {
     margin-bottom: 10px;
@@ -739,6 +796,28 @@ body {
   .partial-match {
     background-color: rgb(207, 62, 0);
     color: white;
+  }
+  .profile-card {
+    position: relative;
+    padding: 8px 35px;
+    font-size: 18px;
+    margin-bottom: 12px;
+    border-radius: none;
+    background-color: inherit;
+    justify-content: space-around;
+
+    .name {
+      display: none;
+    }
+    button {
+      padding: 4px 10px;
+      font-size: 12px;
+    }
+
+    .img-box {
+      width: 140px;
+      height: 140px;
+    }
   }
 }
 
@@ -863,6 +942,8 @@ body {
 }
 .profiles {
   color: white;
+  background-color: rgb(23, 23, 23);
+  min-height: 100vh;
   padding: 75px 15px;
 
   .flex-items {
@@ -873,6 +954,7 @@ body {
 
     .profile-item {
       flex-grow: 1;
+      background-color: black;
       justify-content: space-around;
       span {
         font-weight: 800;
@@ -894,17 +976,16 @@ body {
     .count {
     }
   }
-  background-color: rgb(23, 23, 23);
   .profile-item2 {
     display: flex;
     gap: 30px;
     background-color: black;
-    border-radius: 8px;
+    border-radius: 20px;
     margin-bottom: 15px;
     padding: 15px;
 
     .img-box {
-      border-radius: 20%;
+      border-radius: 18px;
       height: 120px;
       width: 120px;
       position: relative;

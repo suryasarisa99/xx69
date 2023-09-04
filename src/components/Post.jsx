@@ -23,6 +23,7 @@ export default function Post({
   type_,
   showSuggestions,
   item,
+  showProfile,
 }) {
   const { getAxios, toggles } = useContext(DataContext);
   let [smallScreen, setSmallScreen] = useState(false);
@@ -165,9 +166,20 @@ export default function Post({
           </div>
         </div>
         <div
-          onClick={() =>
-            showSuggestions({ title: item?.name || item?.title, id })
-          }
+          onClick={() => {
+            if (toggles.devMode) {
+              showSuggestions({
+                title: item?.name || item?.title,
+                id,
+                img: imgUrl,
+              });
+            } else
+              showProfile({
+                title: item?.name || item?.title,
+                id,
+                img: imgUrl,
+              });
+          }}
         >
           {item?.name && <div className="name">{item.name}</div>}
           {!item?.name && item.title && (

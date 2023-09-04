@@ -2,12 +2,16 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import actress from "../../actress.json";
 import { DataContext } from "../context/DataContext";
 import { FaSearch, FaGoogle } from "react-icons/fa";
+import { BsArrowRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-
-export default function Suggest({ name, onSelect }) {
+import ProfileCard from "./ProfileCard";
+import storage from "../../firebaseConfig.js";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+export default function Suggest({ name, onSelect, img }) {
   const [data, setData] = useState([]);
   const [fuzzyResult, setFuzzyResult] = useState([]);
-
+  const [profileName, setProfileName] = useState(name);
+  const [profileImg, setProfileImg] = useState(img);
   const { accFuseRef } = useContext(DataContext);
 
   let nameWords = name.toLowerCase().trim().split(" ");
@@ -63,6 +67,22 @@ export default function Suggest({ name, onSelect }) {
     setQuery("");
   }, []);
 
+  function getImg(imgName) {
+    let ImgRef = ref(storage, `dps/${imgName}`);
+    setProfileImg("");
+    getDownloadURL(ImgRef).then((url) => {
+      setProfileImg(url);
+      console.log(url);
+    });
+  }
+
+  useEffect(() => {
+    getImg(profileName + "_r160.jpg");
+  }, [profileName]);
+  const updateProfileCard = (name, img) => {
+    setProfileName(name);
+  };
+
   // useEffect(() => {
   //   if (query) {
   //     setData([]);
@@ -74,9 +94,10 @@ export default function Suggest({ name, onSelect }) {
   return (
     <div className="suggestions" onClick={(e) => e.stopPropagation()}>
       <div className="name">
-        <p>{name}</p>
-        <Items name={name} />
+        <p>{profileName}</p>
       </div>
+      <ProfileCard name={profileName} img={profileImg} />
+
       <form
         action=""
         onSubmit={(e) => {
@@ -106,15 +127,9 @@ export default function Suggest({ name, onSelect }) {
           <p className="title">Fuzzy Results</p>
           {fuzzyResult.map((item, ind) => (
             <div key={item.name + "" + ind} onClick={() => onSelect(item.name)}>
-              <div
-                className={
-                  "sugg-item "
-                  // (item.exactMatch ? "exact-match " : "") +
-                  // (item.partialMatch ? "partial-match " : "")
-                }
-              >
+              <div className={"sugg-item "}>
                 <div>{item.name}</div>
-                <Items name={item.name} />
+                <Items name={item.name} updateProfileCard={updateProfileCard} />
               </div>
             </div>
           ))}
@@ -125,13 +140,6 @@ export default function Suggest({ name, onSelect }) {
           <div className="title">Normal Results</div>
           {data.map((item, ind) => (
             <div key={item.name + "" + ind} onClick={() => onSelect(item.name)}>
-              {/* <p>
-            m:{item.matchingWords} a:{item.actualWordsLen}
-          </p>
-          {item.w.map((it, index) => {
-            return <p key={it + " " + index}>{it}</p>;
-          })} */}
-
               <div
                 className={
                   "sugg-item " +
@@ -140,7 +148,7 @@ export default function Suggest({ name, onSelect }) {
                 }
               >
                 <p>{item.name}</p>
-                <Items name={item.name} />
+                <Items name={item.name} updateProfileCard={updateProfileCard} />
               </div>
             </div>
           ))}
@@ -152,16 +160,13 @@ export default function Suggest({ name, onSelect }) {
 
 // Aishwarya lekshmi, ivana, annu emmanual
 
-function Items({ name }) {
+function Items({ name, updateProfileCard }) {
   const navigate = useNavigate();
   return (
     <div className="items">
       <button
         onClick={(e) => {
           e.stopPropagation();
-          // document
-          //   .getElementById("overlay")
-          //   .classList.add("hidden");
           open(`https://www.google.com/search?q=${name}`);
         }}
       >
@@ -171,13 +176,19 @@ function Items({ name }) {
       <button
         onClick={(e) => {
           e.stopPropagation();
-          // open(`http://192.168.0.169:4444/search/${"home"}/${name}`);
-          // open(`https://x69.vercel.app/search/${"home"}/${name}`);
           navigate(`/search/${"home"}/${name}`);
           document.getElementById("overlay").classList.add("hidden");
         }}
       >
         <FaSearch />
+      </button>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          updateProfileCard(name);
+        }}
+      >
+        <BsArrowRight className="right-arrow" />
       </button>
     </div>
   );
