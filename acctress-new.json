@@ -1165,7 +1165,6 @@
     { "name": "Anvita Phaltankar" },
     { "name": "Ananya Pandey" },
     { "name": "Aisha Ahmed" },
-    { "name": "Aashika Ranganath" },
     { "name": "Kangna Ranaut" },
     { "name": "Asin" },
     { "name": "Richa Chadda" },
@@ -1449,7 +1448,6 @@
     { "name": "Vinali Bhatnagar" },
     { "name": "Harshal Patil" },
     { "name": "Neha Singh" },
-    { "name": "gima_ashi" },      => Garima Chaurasia (x)
     { "name": "Bhagyashree Limaye" },
     { "name": "Abhidnya Bhave" },
     { "name": "Ritika Shrotri" },
@@ -1517,6 +1515,8 @@
     { "name": "Anu Hasan" },
     { "name": "Vansheen Verma" },
     { "name": "Simran" },
+    {"name": "multi"},
+    {"name":"other"},
     // { "name": "Harshita Gupta" },
     // { "name": "ESMITA ISHRAT" } 
   ]
