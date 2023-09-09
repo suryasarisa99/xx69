@@ -37,7 +37,7 @@ export default function Profiles() {
       <SearchBar2 query={query} onChange={queryOnChange} />
       <div className="flex-items">
         <p className="profile-item">
-          Total Posts: <span>39,3465,7913</span>
+          Total Posts: <span>39,3465</span>
         </p>
         <p className="profile-item">
           Total Pics: <span>98,854</span>{" "}
