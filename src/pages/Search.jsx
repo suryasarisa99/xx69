@@ -71,9 +71,15 @@ export default function Search({ type_ }) {
       let home = ["/x/home" || "/x" || "/"];
       if (selected == "home") {
         let fdata = fuse.current.search(query).map((item) => item.item._id);
-        getAxios("data/f-search", { ids: fdata, accId: profile._id }).then(
-          (res) => setFilterData(res.data)
-        );
+        if (toggles.devMode) {
+          getAxios("data/dev-search", { ids: fdata, accId: profile._id }).then(
+            (res) => setFilterData(res.data)
+          );
+        } else {
+          getAxios("data/f-search", { ids: fdata, accId: profile._id }).then(
+            (res) => setFilterData(res.data)
+          );
+        }
       } else if (selected == "saved") {
         let savedFuse = new Fuse(saved, {
           keys: ["name", "title"],

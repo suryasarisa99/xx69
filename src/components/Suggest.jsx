@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import ProfileCard from "./ProfileCard";
 import storage from "../../firebaseConfig.js";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-export default function Suggest({ name, onSelect, img }) {
+export default function Suggest({ name, onSelect, img, forceClose }) {
   const [data, setData] = useState([]);
   const [fuzzyResult, setFuzzyResult] = useState([]);
   const [profileName, setProfileName] = useState(name);
@@ -96,7 +96,11 @@ export default function Suggest({ name, onSelect, img }) {
       <div className="name">
         <p>{profileName}</p>
       </div>
-      <ProfileCard name={profileName} img={profileImg} />
+      <ProfileCard
+        name={profileName}
+        img={profileImg}
+        forceClose={forceClose}
+      />
 
       <form
         action=""

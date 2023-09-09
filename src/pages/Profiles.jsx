@@ -37,10 +37,10 @@ export default function Profiles() {
       <SearchBar2 query={query} onChange={queryOnChange} />
       <div className="flex-items">
         <p className="profile-item">
-          Total Posts: <span>31,204</span>
+          Total Posts: <span>39,3465,7913</span>
         </p>
         <p className="profile-item">
-          Total Pics: <span>65,791</span>{" "}
+          Total Pics: <span>98,854</span>{" "}
         </p>
       </div>
       {(query ? pFuse.search(query).map((item) => item.item) : profiles).map(

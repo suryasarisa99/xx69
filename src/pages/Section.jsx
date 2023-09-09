@@ -259,7 +259,12 @@ export default function Section({
         )}
       {suggestions &&
         createPortal(
-          <Suggest name={suggName} onSelect={selectSuggestion} img={imgUrl} />,
+          <Suggest
+            name={suggName}
+            onSelect={selectSuggestion}
+            img={imgUrl}
+            forceClose={foreCloseOverlay}
+          />,
           document.getElementById("overlay")
         )}
 
