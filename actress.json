@@ -1163,9 +1163,7 @@
   { "name": "Tejaswini Pandit" },
   { "name": "Gayatri Datar" },
   { "name": "Anvita Phaltankar" },
-  { "name": "Ananya Pandey" },
   { "name": "Aisha Ahmed" },
-  { "name": "Aashika Ranganath" },
   { "name": "Kangna Ranaut" },
   { "name": "Asin" },
   { "name": "Richa Chadda" },
@@ -1360,7 +1358,6 @@
   { "name": "Priyanka Gandhi Vadra" },
   { "name": "Bolo Tara Ra Ra" },
   { "name": "Yashika Aannand" },
-  { "name": "Rashi Khanna" },
   { "name": "Megha Shetty" },
   { "name": "Tanya Hope" },
   { "name": "Sona Heiden" },
@@ -1519,6 +1516,8 @@
   { "name": "ESMITA ISHRAT" },
   { "name": "Janany Kunaseelan" },
   { "name": "Apoorva Mukhija" },
+  { "name": "Aathmika" },
+  { "name": "Sanchita Shetty" },
   { "name": "multi" },
   { "name": "other" }
 ]

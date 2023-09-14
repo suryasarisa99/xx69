@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState, useContext, useReducer } from "react";
+import { useEffect, useState, useRef, useContext, useReducer } from "react";
 import { DataContext } from "../context/DataContext";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -18,88 +18,75 @@ export default function Signup() {
     emailReq: false,
     emailInvalid: false,
   });
+  const isError = useRef(false);
   const navigate = useNavigate();
   let [pass, setPass] = useState("");
   let [fname, setFname] = useState("");
   let [email, setEmail] = useState("");
   let [userName, setUserName] = useState("");
+  const e = useRef(null);
+  const isMounted = useRef(true);
+  function wait() {
+    console.log("<===== useeffect ======>");
+    isError.current = false;
+    for (let error in errors) {
+      console.log(`${error}: ${errors[error]}`);
+      if (errors[error] === true) {
+        console.log(`> ${error}: ${errors[error]}`);
+        isError.current = true;
+        break;
+      }
+    }
+    console.log("<======================>");
 
-  // useEffect(() => {
-  //   if (userData) {
-  //     console.log("user Data found");
-  //     navigate("/main");
-  //   } else console.log("No user Data");
-  // }, [userData]);
+    if (!isError.current) {
+      console.log("running axios function");
+      axiosSignup();
+    }
+  }
+  useEffect(() => {
+    if (!isMounted.current) {
+      wait();
+    } else isMounted.current = false;
+  }, [errors, e.current]);
 
-  // useEffect(() => {
-  //   if ("Notification" in window) {
-  //     // Check if the browser supports notifications
-  //     if (Notification.permission === "granted") {
-  //       // Permission has already been granted, create and display the notification
-  //       new Notification("Notification Title", {
-  //         body: "Notification Message",
-  //         // Other options like icon, badge, etc. can be specified here
-  //       });
-  //     } else if (Notification.permission !== "denied") {
-  //       // Permission has not been granted or denied yet, request permission from the user
-  //       Notification.requestPermission().then((permission) => {
-  //         if (permission === "granted") {
-  //           // Permission has been granted, create and display the notification
-  //           new Notification("Surya Hello", {
-  //             body: "Notification Message",
-  //             // Other options like icon, badge, etc. can be specified here
-  //           });
-  //         }
-  //       });
-  //     }
-  //   }
-
-  //   new Notification("Surya Hello", {
-  //     body: "Notification Message",
-  //     // Other options like icon, badge, etc. can be specified here
-  //   });
-  // }, []);
-
-  const handleSignUp = (e) => {
-    e.preventDefault();
+  const handleSignUp = (event) => {
+    event.preventDefault();
     if (fname.trim().length < 1) dispatch({ type: "fnameReq", value: true });
     if (userName.trim().length < 1)
       dispatch({ type: "usernameReq", value: true });
     if (email.trim().length < 1) dispatch({ type: "emailReq", value: true });
+    if (!email.includes("@")) dispatch({ type: "emailInvalid", value: true });
     if (pass.trim().length < 3) dispatch({ type: "passLen", value: true });
-
-    // console.log(Object.entries(errors));
-    let noError = true;
-    for (let error in errors) {
-      if (errors[error] === true) {
-        // console.log(`${error}: ${errors[error]}`);
-        noError = false;
-        break;
-      }
-    }
-    // console.log(`noError: ${noError}`);
-    if (noError) {
-      // console.log("no Error");
-      axios
-        .post(`${import.meta.env.VITE_SERVER}/auth/signup`, {
-          fname: e.target.fname.value,
-          sname: e.target.sname.value,
-          username: e.target.id.value,
-          password: e.target.password.value,
-          email: e.target.email.value,
-        })
-        .then((res) => {
-          console.log(res.data);
-          if (!res.data.status) {
-            console.log("user found");
-            dispatch({ type: "userInvalid", value: true });
-          } else {
-            localStorage.setItem("token", res.data.token);
-            navigate("/verify");
-          }
-        });
-    }
+    e.current = event;
+    // setTimeout(wait, 5000);
   };
+
+  function axiosSignup() {
+    axios
+      .post(`${import.meta.env.VITE_SERVER}/auth/signup`, {
+        // fname: e.target.fname.value,
+        sname: e.current.target.sname.value,
+        password: pass,
+        username: userName,
+        fname,
+        // sname,
+        email,
+      })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data?.username) {
+          console.log("user found");
+          dispatch({ type: "userInvalid", value: true });
+        } else if (res.data?.email) {
+          dispatch({ type: "emailInvalid", value: true });
+        } else if (res.data?.status) {
+          console.log("user signuped");
+          localStorage.setItem("token", res.data.token);
+          navigate("/verify");
+        }
+      });
+  }
   return (
     <form className="signup" onSubmit={handleSignUp}>
       <h1 className="signup">Create Account</h1>
@@ -128,12 +115,12 @@ export default function Signup() {
             setEmail(e.target.value);
             if (errors.emailReq && e.target.value.length >= 1)
               dispatch({ type: "emailReq", value: false });
-            if (errors.emailInvalid)
+            if (errors.emailInvalid && e.target.value.includes("@"))
               dispatch({ type: "emailInvalid", value: false });
           }}
         />
         {errors.emailReq && <Error>Email Name can`&apos;`t be Empty</Error>}
-        {errors.emailInvalid && <Error>The Email Name is Alrady Taken</Error>}
+        {errors.emailInvalid && <Error>The Email is Invalid</Error>}
       </div>
 
       <div className="field">
@@ -150,7 +137,7 @@ export default function Signup() {
           }}
         />
         {errors.usernameReq && <Error>User Name can`&apos;`t be Empty</Error>}
-        {errors.userInvalid && <Error>The User Name is Alrady Taken</Error>}
+        {errors.userInvalid && <Error>The User Name is Already Taken</Error>}
       </div>
 
       <div className="field">
