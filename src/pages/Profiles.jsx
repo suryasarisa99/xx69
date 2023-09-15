@@ -43,11 +43,13 @@ export default function Profiles() {
           Total Pics: <span>98,854</span>{" "}
         </p>
       </div>
-      {(query ? pFuse.search(query).map((item) => item.item) : profiles).map(
-        (profile) => {
-          return <ProfileItem2 profile={profile} key={profile.name} />;
-        }
-      )}
+      <div className="grid">
+        {(query ? pFuse.search(query).map((item) => item.item) : profiles).map(
+          (profile) => {
+            return <ProfileItem2 profile={profile} key={profile.name} />;
+          }
+        )}
+      </div>
     </div>
   );
 }

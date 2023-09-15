@@ -1,10 +1,7 @@
-// import {  } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function ProfileCard({ name, id, img, forceClose, x }) {
+export default function ProfileCard({ name, id, img, forceClose }) {
   const navigate = useNavigate();
-  console.log(forceClose);
-  console.log(x);
   function openProfile() {
     forceClose();
     navigate("/profile/" + name);

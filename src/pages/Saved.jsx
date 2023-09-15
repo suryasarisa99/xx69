@@ -41,7 +41,7 @@ export default function Saved({ setShowBars }) {
   }, [profile]);
 
   return (
-    <div>
+    <div className="saved">
       <Section
         setShowBars={setShowBars}
         data={finalData}

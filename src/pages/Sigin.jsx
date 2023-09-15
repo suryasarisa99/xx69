@@ -40,12 +40,12 @@ export default function Sigin() {
         <input name="id" placeholder="User Name" />
         <input name="password" type="password" placeholder="password" />
         <button>SignIn</button>
+        <center>
+          <p className="sm-txt">
+            Create Account ? <Link to="/signup">signup</Link>
+          </p>
+        </center>
       </form>
-      <center>
-        <p className="sm-txt">
-          Create Account ? <Link to="/signup">signup</Link>
-        </p>
-      </center>
     </div>
   );
 }

@@ -95,8 +95,8 @@ body {
       padding: 2px;
     }
     .img-box {
-      width: 50px;
-      height: 50px;
+      width: 45px;
+      height: 45px;
       position: relative;
       overflow: hidden;
       border-radius: 50%;
@@ -682,17 +682,18 @@ body {
 .home {
   margin-top: 0;
 }
-.home .x.section .section-carousels .post:first-child {
+:is(.home) .x.section .section-carousels .post:first-child {
   padding-top: 85px;
 }
+:is(.videos, .saved) .x.section .section-carousels .post:first-child {
+  padding-top: 55px;
+}
+
 .x.section {
   .section-carousels {
     height: 100vh;
     overflow-y: scroll;
 
-    .post:first-child {
-      padding-top: 55px;
-    }
     .carousel:last-child {
       padding-bottom: 30px;
     }
@@ -705,6 +706,7 @@ body {
   color: white;
   position: absolute;
   width: 95%;
+  max-width: 800px;
   top: 60px;
   left: 50%;
   transform: translateX(-50%);
@@ -742,8 +744,13 @@ body {
     padding: 5px 15px;
     border-radius: 10px;
     // background-color: rgb(15, 25, 20);
+  }
+  .items-con {
     max-height: 165px;
     overflow: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 4px;
   }
   .title {
     font-size: 12px;
@@ -751,6 +758,7 @@ body {
     margin-bottom: 8px;
   }
   .normal-results {
+    // margin-top: 60px;
     @extend .fuzzy-results;
     // background-color: rgb(67, 53, 29);
   }
@@ -779,6 +787,8 @@ body {
 
     .items {
       display: flex;
+      // display: grid;
+      // grid-template-columns: 1fr 1fr;
       gap: 3px;
       align-items: center;
       padding: 0px;
@@ -904,6 +914,9 @@ body {
     // max-width: 700px;
     // width: calc(100% - 140px);
   }
+  .suggestions {
+    left: 50%;
+  }
 }
 @media (min-width: 900px) {
   .x.section {
@@ -953,6 +966,12 @@ body {
   background-color: rgb(23, 23, 23);
   min-height: 100vh;
   padding: 75px 15px;
+
+  .grid {
+    display: grid;
+    column-gap: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  }
 
   .flex-items {
     display: flex;

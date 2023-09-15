@@ -2,10 +2,9 @@ import { createContext, useState, useEffect, useReducer, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Fuse from "fuse.js";
-import actress from "../../actress.json";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import storage from "../../firebaseConfig.js";
-
+import actressx from "../../actress.json";
 let DataContext = createContext();
 
 export default function DataProvider({ children }) {
@@ -69,7 +68,7 @@ export default function DataProvider({ children }) {
   useEffect(() => {
     console.log(`Signin: ${signin}`);
     if (signin) {
-      accFuseRef.current = new Fuse(actress, {
+      accFuseRef.current = new Fuse(actressx, {
         keys: ["name"],
         threshold: 0.4,
       });

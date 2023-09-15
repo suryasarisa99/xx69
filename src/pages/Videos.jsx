@@ -26,7 +26,7 @@ export default function Videos({ setShowBars }) {
   };
 
   return (
-    <div>
+    <div className="videos">
       <Section
         setShowBars={setShowBars}
         data={gifs}
