@@ -76,20 +76,9 @@ export default function Suggest({ name, onSelect, img, forceClose }) {
     });
   }
 
-  useEffect(() => {
-    getImg(profileName + "_r160.jpg");
-  }, [profileName]);
   const updateProfileCard = (name, img) => {
     setProfileName(name);
   };
-
-  // useEffect(() => {
-  //   if (query) {
-  //     setData([]);
-  //     const fdata = accFuseRef.current.search(query).map((item) => item.item);
-  //     setTimeout(() => setFuzzyResult(fdata), 2);
-  //  }
-  // }, [query]);
 
   return (
     <div className="suggestions" onClick={(e) => e.stopPropagation()}>

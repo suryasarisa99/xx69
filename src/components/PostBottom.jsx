@@ -46,22 +46,29 @@ export default function PostBottom({
     setSaved((prv) => prv.filter((s) => s._id != id));
     setSavedIds((prv) => prv.filter((sid) => sid != id));
   };
-  const uploadToFireBase = async (imageSrc) => {
+  const uploadToFireBase = async (imageSrc, resolution) => {
     const res = await fetch(imageSrc);
     const imageBlob = await res.blob();
     const timestamp = new Date().getTime();
-    const fileName = `${item.name}_r160.jpg`;
-    let ImgRef = ref(storage, `dps/${fileName}`);
+    const fileName = `${item.name}_${resolution}.jpg`;
+    let ImgRef = ref(storage, `xdps/${fileName}`);
     uploadBytes(ImgRef, imageBlob).then((res) => {
       console.log(res);
     });
   };
 
   const handleUpload = async (img) => {
-    getAxios("data/red-quality", { img, name: item.name }).then((res) => {
+    getAxios("data/red-quality", {
+      img,
+      name: item.name,
+      imgId: id,
+      pos: selected,
+    }).then((res) => {
       console.log(res.data);
-      const imageSrc = `data:${res.data.contentType};base64,${res.data.base64Data}`;
-      uploadToFireBase(imageSrc);
+      const imageSrc1 = `data:${res.data.contentType};base64,${res.data.base64Datas[0]}`;
+      const imageSrc2 = `data:${res.data.contentType};base64,${res.data.base64Datas[1]}`;
+      uploadToFireBase(imageSrc1, "r_low");
+      uploadToFireBase(imageSrc2, "r_md");
     });
   };
   return (
@@ -121,13 +128,16 @@ export default function PostBottom({
 
         <div className="right-icons">
           {toggles.devMode && item.name && (
-            <p
+            <motion.p
+              className="add-dp"
+              whileTap={{ background: "gray" }}
+              transition={{ duration: 0.5 }}
               onClick={() => {
                 handleUpload(item.images[selected]);
               }}
             >
               dp
-            </p>
+            </motion.p>
           )}
           <motion.div whileTap={{ scale: 1.3 }}>
             {isSaved ? (

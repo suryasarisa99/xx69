@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Fuse from "fuse.js";
 import actress from "../../actress.json";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import storage from "../../firebaseConfig.js";
 
 let DataContext = createContext();
 
@@ -15,6 +17,8 @@ export default function DataProvider({ children }) {
   const [savedIds, setSavedIds] = useState([]);
   const [gifs, setGifs] = useState([]);
   const [data, setData] = useState([]);
+  const [actress, setActress] = useState([]);
+  const [profileImgs, setProfileImgs] = useState([]);
 
   const accFuseRef = useRef(null);
   const navigate = useNavigate();
@@ -119,6 +123,9 @@ export default function DataProvider({ children }) {
           setSignin(true);
           setData(res.data.data);
           setProfile(res.data.profile);
+          setActress(res.data.actress);
+          console.log(res.data.actress);
+          getAllImgs(res.data.actress);
           setTimeout(() => {
             console.log("<== started Fetch ==>");
             fetchOtherData(res.data.profile._id);
@@ -140,6 +147,31 @@ export default function DataProvider({ children }) {
       [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
+  }
+  function getAllImgs(images) {
+    const promises = images.map((img) => {
+      let ImgRef = ref(storage, `xdps/${img._id}_r_md.jpg`);
+      return getDownloadURL(ImgRef)
+        .then((url) => ({
+          name: img._id,
+          url: url,
+          // [img._id]: url,
+        }))
+        .catch((error) => {
+          console.error("Error fetching image:", error);
+          return null; // Return null if there was an error so you can filter it out later.
+        });
+    });
+
+    Promise.all(promises)
+      .then((imageDataArray) => {
+        const validImageData = imageDataArray.filter((data) => data !== null);
+        setProfileImgs(validImageData);
+        console.log(validImageData);
+      })
+      .catch((error) => {
+        console.error("Error fetching images:", error);
+      });
   }
 
   return (
@@ -173,6 +205,10 @@ export default function DataProvider({ children }) {
         // dispatchFetch,
         getAxios,
         shuffleArray,
+        actress,
+        setActress,
+        profileImgs,
+        setProfileImgs,
       }}
     >
       {children}

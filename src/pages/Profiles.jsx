@@ -5,7 +5,7 @@ import SearchBar2 from "../components/SearchBar2";
 import Fuse from "fuse.js";
 import storage from "../../firebaseConfig.js";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
+import useProfileImg from "../../hooks/useProfileImg";
 import actressX from "../../actress.json";
 export default function Profiles() {
   const { profiles, getAxios, setProfiles, fetching } = useContext(DataContext);
@@ -67,21 +67,18 @@ function ProfileItem({ profile }) {
 function ProfileItem2({ profile }) {
   const navigate = useNavigate();
   const [imgUrl, setImgUrl] = useState();
-  const { profiles, getAxios, setProfiles, fetching } = useContext(DataContext);
+  const { profiles, getAxios, setProfiles, fetching, actress, profileImgs } =
+    useContext(DataContext);
+  useProfileImg(setImgUrl, profile.name);
 
   function getImg(imgName) {
-    let ImgRef = ref(storage, `dps/${imgName}`);
+    let ImgRef = ref(storage, `xdps/${imgName}`);
     getDownloadURL(ImgRef).then((url) => {
       setImgUrl(url);
       console.log(url);
     });
   }
 
-  useEffect(() => {
-    if (profile.images) {
-      getImg(profile.name + "_r160.jpg");
-    }
-  }, [profiles]);
   return (
     <div
       className="profile-item2"

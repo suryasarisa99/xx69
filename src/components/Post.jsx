@@ -1,18 +1,14 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { DataContext } from "../context/DataContext";
-import { FaRegBookmark, FaBookmark, FaHeart, FaRegHeart } from "react-icons/fa";
-import { RxEnterFullScreen, RxExitFullScreen } from "react-icons/rx";
-import { BsShareFill } from "react-icons/bs";
 import "./style.scss";
 import _throttle from "lodash/throttle";
 import { motion, AnimatePresence } from "framer-motion";
-import LoadingCard from "./LoadingCard";
-import LoadingImg from "./LoadingImg";
 import Carousel1 from "./Carousel1";
 import Carousel2 from "./Carousel2";
 import PostBottom from "./PostBottom";
 import storage from "../../firebaseConfig.js";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import useProfileImg from "../../hooks/useProfileImg";
 export default function Post({
   onSwipe,
   onShare,
@@ -25,7 +21,7 @@ export default function Post({
   item,
   showProfile,
 }) {
-  const { getAxios, toggles } = useContext(DataContext);
+  const { getAxios, toggles, profileImgs } = useContext(DataContext);
   let [smallScreen, setSmallScreen] = useState(false);
   let [heart, setHeart] = useState(false);
   let [SM, setSM] = useState(false);
@@ -51,6 +47,7 @@ export default function Post({
   useEffect(() => {
     loadAllImgs(item.images);
   }, []);
+  useProfileImg(setImgUrl, item.name);
 
   function imgRatio() {
     const thresold = 0.14;
@@ -74,20 +71,6 @@ export default function Post({
     //   }
     // }
   }
-
-  function getImg(imgName) {
-    let ImgRef = ref(storage, `dps/${imgName}`);
-    getDownloadURL(ImgRef).then((url) => {
-      setImgUrl(url);
-      console.log(url);
-    });
-  }
-
-  useEffect(() => {
-    if (item.images) {
-      getImg(item.name + "_r160.jpg");
-    }
-  }, [item.images, item.name]);
 
   function AINF() {
     // All Images Not Found

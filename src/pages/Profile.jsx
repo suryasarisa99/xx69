@@ -8,7 +8,8 @@ import axios from "axios";
 
 export default function Profile() {
   const { name } = useParams();
-  const { carouselsLoaded, dispatchLoaded, profile } = useContext(DataContext);
+  const { carouselsLoaded, dispatchLoaded, profile, actress, profileImg } =
+    useContext(DataContext);
   const navigate = useNavigate();
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [profileData, setProfileData] = useState([]);
@@ -25,8 +26,15 @@ export default function Profile() {
         )
       ).data;
       console.log(fData);
-      const pic = fData?.[Math.floor(Math.random() * fData.length)]?.images[0];
-      setProfilePhoto(pic);
+      const actor = actress.find((item) => item._id == name);
+      if (actor) {
+        setProfilePhoto(actor.img);
+      } else {
+        const pic =
+          fData?.[Math.floor(Math.random() * fData.length)]?.images[0];
+        setProfilePhoto(pic);
+      }
+
       setProfileData(fData);
     }
     fetchData();
