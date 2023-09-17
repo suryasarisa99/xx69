@@ -28,7 +28,7 @@ export default function Section({
     profile,
     postsData,
   } = useContext(DataContext);
-  // howToLoadData.total = postsData.length;
+  // howToLoadData.total = postsData[name][type].length;
 
   // const [finalData, setFinalData] = useState([]);
   const [share, setShare] = useState(false);
@@ -43,7 +43,7 @@ export default function Section({
   const sectionRef = useRef(null);
   const cleanupRef = useRef(null);
   const postRef = useRef(null);
-  const { index } = useParams();
+  const { index, type, name } = useParams();
 
   // useEffect(() => {
   //   if (!data) {
@@ -54,7 +54,7 @@ export default function Section({
     return { ...state, [action.type]: action.payload };
   }
   const [Index, dispatchIndex] = useReducer(reducer, {
-    start: +index - 3,
+    start: Math.max(+index - 3, 0),
     end: +index + 3,
   });
 
@@ -63,10 +63,9 @@ export default function Section({
     if (Index.end - (beg + +index) <= 1) {
       dispatchIndex({
         type: "end",
-        payload: Math.min(Index.end + 5, postsData.length),
+        payload: Math.min(Index.end + 5, postsData[name][type].length),
       });
     } else if (index <= 2 && index > 0) {
-      console.log("Worked");
       if (index == 0) return;
       dispatchIndex({
         type: "start",
@@ -75,25 +74,17 @@ export default function Section({
     }
   }
 
-  useEffect(() => {
-    console.log(postsData.slice(Index.start, Index.end));
-    console.log(postsData.slice(Index.start, Index.end).length);
-    console.log(`start: ${Index.start} || end: ${Index.end}`);
-  }, [Index]);
+  // useEffect(() => {
+  //   console.log(postsData[name][type].slice(Index.start, Index.end));
+  //   console.log(postsData[name][type].slice(Index.start, Index.end).length);
+  //   console.log(`start: ${Index.start} || end: ${Index.end}`);
+  // }, [Index]);
 
   useEffect(() => {
-    document.getElementById(postsData[index]?._id).scrollIntoView();
-    // setTimeout(() => {
-    // document.getElementById(postsData[index]?._id).scrollIntoView();
-    // }, 1);
-  }, [index, postsData]);
-
-  useEffect(() => {
-    // console.log(postRef.current);
-    setTimeout(() => {
-      postRef.current?.scrollIntoView();
-    }, [1000]);
-  }, [postRef]);
+    document
+      .getElementById(postsData[name][type][index]?._id)
+      ?.scrollIntoView();
+  }, [index, postsData[name][type]]);
 
   const showShare = (obj) => {
     openOverlay();
@@ -117,7 +108,6 @@ export default function Section({
     }
   };
   const foreCloseOverlay = (e) => {
-    console.log("close ---");
     document.getElementById("overlay").classList.add("hidden");
   };
   const handleScroll = _throttle(() => {
@@ -159,8 +149,8 @@ export default function Section({
     setSuggestions(false);
     foreCloseOverlay();
     let index = -1;
-    for (let i = 0; i < postsData.length; i++) {
-      if (postsData[i]._id == id) {
+    for (let i = 0; i < postsData[name][type].length; i++) {
+      if (postsData[name][type][i]._id == id) {
         index = i;
         break;
       }
@@ -172,13 +162,13 @@ export default function Section({
       })
       .then((res) => console.log(res));
 
-    postsData[index].name = name;
-    setData([...postsData]);
+    postsData[name][type][index].name = name;
+    setData([...postsData[name][type]]);
   }
 
   useEffect(() => {
     // setTotal(data.length);
-  }, [postsData]);
+  }, [postsData[name][type]]);
 
   // For Persistant Scroll
   useEffect(() => {
@@ -254,30 +244,31 @@ export default function Section({
   }
   return (
     <div className="x section">
-      {toggles.devMode && (
+      {/* {toggles.devMode && (
         <p className="temp">
           start: {Index.start} || end: {Index.end}
         </p>
-      )}
+      )} */}
       <div className="section-carousels" ref={sectionRef}>
-        {postsData?.slice(Index.start, Index.end)?.map((item, Pindex) => (
-          <Post
-            key={item._id}
-            type_={type_}
-            onShare={showShare}
-            showSuggestions={showSuggestions}
-            showProfile={openProfileCard}
-            id={item._id}
-            addLike={addLike}
-            removeLike={removeLike}
-            item={item}
-            cIndex={Pindex}
-            ref={Pindex == +index ? postRef : null}
-            surya={Pindex == +index ? postRef : null}
-            onSwipe={() => _throttle(handleCarousel(Pindex), 1400)}
-          />
-        ))}
-        {postsData.length == 0 && (
+        {postsData[name][type]
+          ?.slice(Index.start, Index.end)
+          ?.map((item, Pindex) => (
+            <Post
+              key={item._id}
+              type_={type_}
+              onShare={showShare}
+              showSuggestions={showSuggestions}
+              showProfile={openProfileCard}
+              id={item._id}
+              addLike={addLike}
+              removeLike={removeLike}
+              item={item}
+              cIndex={Pindex}
+              postRef={Pindex == +index ? postRef : null}
+              onSwipe={() => _throttle(handleCarousel(Pindex), 1400)}
+            />
+          ))}
+        {postsData[name][type].length == 0 && (
           <>
             <LoadingCard />
             <LoadingCard />

@@ -18,14 +18,19 @@ export default function DataProvider({ children }) {
   const [data, setData] = useState([]);
   const [actress, setActress] = useState([]);
   const [profileImgs, setProfileImgs] = useState([]);
-  const [postsData, setPostsData] = useState([]);
+  const [postsData, setPostsData] = useState({});
 
   const accFuseRef = useRef(null);
   const navigate = useNavigate();
 
   let tg = JSON.parse(localStorage.getItem("toggles")) || {};
   const reducer = (state, action) => {
-    return { ...state, [action.type]: action.payload };
+    if (action.type == "profile")
+      return {
+        ...state,
+        [action.type]: { ...state[action.type], ...action.payload },
+      };
+    else return { ...state, [action.type]: action.payload };
   };
 
   // * UseReducers
@@ -54,7 +59,7 @@ export default function DataProvider({ children }) {
     saved: 3,
     search: 3,
     videos: 2,
-    profile: 2,
+    profile: null,
     undefined: 1,
   });
 

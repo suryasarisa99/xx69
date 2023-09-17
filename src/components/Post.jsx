@@ -20,8 +20,7 @@ export default function Post({
   showSuggestions,
   item,
   showProfile,
-  ref,
-  surya,
+  postRef,
 }) {
   const { getAxios, toggles, profileImgs } = useContext(DataContext);
   let [smallScreen, setSmallScreen] = useState(false);
@@ -131,6 +130,10 @@ export default function Post({
     });
   }
 
+  useEffect(() => {
+    console.log(postRef?.current);
+  }, [postRef]);
+
   if (noImaes && !toggles.devMode) return null;
 
   if (!item.images || item.images.length == 0) return null;
@@ -143,7 +146,7 @@ export default function Post({
     smallScreen,
   };
   return (
-    <div className="post" id={id} ref={surya}>
+    <div className="post" id={id} ref={postRef}>
       <div className="top-profile-bar">
         <div className="pink-border">
           <div className="img-box">

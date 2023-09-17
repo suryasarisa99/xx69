@@ -37,9 +37,8 @@ function App() {
       <Route path="/signin" element={<Sigin />} />
       <Route path="/verify" element={<Verify />} />
       <Route path="/verification/:id" element={<Verification />} />
+      <Route path="/profile/:name/:type/:index" element={<Posts2 />} />
       <Route path="/profile/:name" element={<Profile />} />
-      <Route path="/post/:index" element={<Posts2 />} />
-      {/* <Route path="/post/:index" element={<Section />} /> */}
     </Routes>
   );
 }

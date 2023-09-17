@@ -852,23 +852,6 @@ body {
   }
 }
 
-@media (min-width: 400px) {
-  .x.section .carousel img {
-  }
-}
-@media (min-width: 650px) and (max-width: 899px) {
-  .x.section {
-    .carousel2 {
-      img {
-        width: 100%;
-      }
-      .img-box {
-        width: 50%;
-      }
-    }
-  }
-}
-
 // .desktop-nav {
 //   background-color: red;
 //   position: fixed;
@@ -998,8 +981,6 @@ body {
     margin-bottom: 8px;
     border-radius: 8px;
 
-    .name {
-    }
     .count {
     }
   }
@@ -1047,43 +1028,113 @@ body {
 
 .profile {
   background-color: black;
+  position: relative;
+
+  .switch-bar {
+    background-color: rgb(0, 0, 0);
+    display: flex;
+    justify-content: space-around;
+
+    p {
+      padding: 15px;
+      background-color: black;
+      flex-grow: 1;
+      position: relative;
+      text-align: center;
+
+      .icon {
+        font-size: 18px;
+        color: rgb(126, 126, 126);
+      }
+      .grid {
+        font-size: 22px;
+      }
+      .video {
+        font-size: 25px;
+      }
+    }
+    p.selected {
+      .icon {
+        color: white;
+      }
+      &::before {
+        content: "";
+        position: absolute;
+        bottom: 5px;
+        left: 17.5%;
+        width: 65%;
+        height: 1.5px;
+        background-color: rgb(188, 188, 188);
+      }
+    }
+    &.fixed-bar {
+      width: 100%;
+      position: fixed;
+      z-index: 2;
+      padding: 0;
+      padding-top: 4px;
+      top: 54px;
+      border-top: 1px solid rgb(39, 39, 39);
+
+      // border: none;
+      margin: 0;
+      p {
+        padding: 4px 0px 7px 0px;
+      }
+    }
+  }
 
   .head-bar {
-    border-bottom: 1px solid gray;
+    // border-bottom: 1px solid gray;
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 25px;
     position: fixed;
     background-color: black;
+    padding: 12px 0px 8px 20px;
 
     top: 0;
     width: 100%;
     z-index: 2;
     .back-btn-x {
-      font-size: 24px;
+      margin-top: 2px;
+      font-size: 28px;
+      font-weight: 600;
+      // background-color: red;
     }
-    .back-btn-outer {
-      padding: 14px;
+    .flex {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .name {
+      font-weight: 600;
+      font-size: 20px;
+    }
+    .verfied {
+      margin-top: 6px;
+      color: rgb(9, 153, 255);
+      font-size: 20px;
     }
   }
   .main {
-    margin-top: 60px;
+    margin-top: 30px;
     background-color: black;
 
     display: flex;
-    padding: 40px 20px;
+    padding: 40px 40px 8px 30px;
     justify-content: space-between;
     gap: 15px;
     .pic {
       border: 1px solid gray;
       border-radius: 12px;
-      height: 180px;
-      width: 145px;
+      height: 160px;
+      width: 120px;
       flex-shrink: 0;
     }
     .image-container {
-      width: 180px;
-      height: 200px;
+      width: 135px;
+      height: 150px;
       overflow: hidden; /* This is important to clip the image */
       border-radius: 10px;
       flex-shrink: 0;
@@ -1103,6 +1154,7 @@ body {
     //   flex-shrink: 0;
     // }
     .about {
+      // background-color: red;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1142,22 +1194,26 @@ body {
 .profile-view {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  // gap: 20px;
-  gap: 2px;
-  .img-box {
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
+  gap: 1.5px;
 
+  .img-box {
+    aspect-ratio: 1 / 1.2;
+    overflow: hidden;
     position: relative;
 
     img {
       position: absolute;
       top: 0px;
-      left: 0;
+      left: 0px;
       scale: 1.1;
       width: 100%;
+      // height: 100%;
       object-fit: cover;
     }
+  }
+  .gifs {
+    aspect-ratio: 1/2;
+    height: 100%;
   }
   .loader {
     grid-column: 1/-1;
@@ -1190,10 +1246,6 @@ body {
 
 .post-page {
   .posts-content {
-    // display: flex;
-    // flex-direction: column;
-    // gap: 15px;
-
     .post-image {
       width: 100%;
       flex-shrink: 0;
@@ -1205,5 +1257,28 @@ body {
         object-fit: cover;
       }
     }
+  }
+}
+
+@media (min-width: 400px) {
+  .x.section .carousel img {
+  }
+}
+@media (min-width: 650px) and (max-width: 899px) {
+  .x.section {
+    .carousel2 {
+      img {
+        width: 100%;
+      }
+      .img-box {
+        width: 50%;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 650px) {
+  .profile-view {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
 }

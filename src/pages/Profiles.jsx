@@ -15,6 +15,7 @@ export default function Profiles() {
   let actress = useRef(null);
   let totalVerCarousels = useRef(0);
   console.log(profiles);
+
   useEffect(() => {
     if (profiles.length == 0 && fetching.current.profiles == 0) {
       fetching.current.profiles = 1;
@@ -28,7 +29,6 @@ export default function Profiles() {
 
   function queryOnChange(q) {
     setQuery(q);
-
     scrollTo({ top: 0 });
   }
 

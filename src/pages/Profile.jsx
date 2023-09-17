@@ -1,21 +1,46 @@
 import { useState, useContext, useRef, useEffect } from "react";
 import { DataContext } from "../context/DataContext";
 import { useNavigate, useParams } from "react-router-dom";
-
+import { GrGrid } from "react-icons/gr";
 import Section from "./Section";
-import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import axios from "axios";
 import ProfileView from "../components/ProfileView";
-
+import { BiMoviePlay } from "react-icons/bi";
+import { BsGrid3X3, BsArrowLeft } from "react-icons/bs";
+import { MdVerified } from "react-icons/md";
 export default function Profile() {
   const { name } = useParams();
-  const { carouselsLoaded, dispatchLoaded, profile, actress, profileImg } =
-    useContext(DataContext);
+  const {
+    carouselsLoaded,
+    dispatchLoaded,
+    profile,
+    actress,
+    profileImg,
+    postsData,
+    setPostsData,
+  } = useContext(DataContext);
   const navigate = useNavigate();
   const [profilePhoto, setProfilePhoto] = useState(null);
-  const [profileData, setProfileData] = useState([]);
+  const [showGifs, setShowGifs] = useState(false);
+  const switchBarRef = useRef(null);
+  // const [postsData, setPostsData] = useState([]);
 
   useEffect(() => {
+    if (!profile) return;
+    if (postsData[name]) {
+      const actor = actress.find((item) => item._id == name);
+
+      if (actor) {
+        setProfilePhoto(actor.img);
+      } else {
+        const pic =
+          postsData[name].posts?.[
+            Math.floor(Math.random() * postsData[name].posts.length)
+          ]?.images[0];
+        setProfilePhoto(pic);
+      }
+    }
+    // setPostsData([]);
     scrollTo({ top: 0, behavior: "instant" });
     async function fetchData() {
       const fData = (
@@ -29,6 +54,7 @@ export default function Profile() {
       console.log(fData);
       const actor = actress.find((item) => item._id == name);
       if (actor) {
+        console.log(actor.img);
         setProfilePhoto(actor.img);
       } else {
         const pic =
@@ -36,11 +62,27 @@ export default function Profile() {
         setProfilePhoto(pic);
       }
 
-      setProfileData(fData);
+      const posts = fData.filter((item) => !item.images[0].endsWith(".gif"));
+      const gifs = fData.filter((item) => item.images[0].endsWith(".gif"));
+
+      setPostsData((prv) => ({ ...prv, [name]: { posts, gifs } }));
     }
     fetchData();
     dispatchLoaded({ type: "profile", payload: 2 });
   }, [name, profile]);
+
+  useEffect(() => {
+    const handleScroll = (e) => {
+      if (scrollY >= 186) {
+        switchBarRef?.current?.classList?.add("fixed-bar");
+      } else if (scrollY < 186)
+        switchBarRef?.current?.classList?.remove("fixed-bar");
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const howToLoadData = {
     initial: carouselsLoaded.profile || 3,
@@ -49,24 +91,31 @@ export default function Profile() {
     dispatchLoaded,
     swipeOnLast: 2,
     type_: "profile",
-    total: profileData.length,
+    total: postsData.length,
   };
 
   return (
     <div className="profile">
       <div className="head-bar">
         <div className="back-btn-outer" onClick={() => navigate(-1)}>
-          <MdOutlineKeyboardBackspace className="back-btn-x" />
+          <BsArrowLeft className="back-btn-x" />
         </div>
-        Profile
+        <div className="flex">
+          <p className="name">{name}</p>
+          <p className="icon ">
+            <MdVerified className="verfied" />
+          </p>
+        </div>
       </div>
       <div className="main">
         <div className="image-container">
           <img src={profilePhoto} alt="" className="img" />
         </div>
         <div className="about">
-          <div className="name">{name}</div>
-          <p className="count">posts: {profileData.length}</p>
+          <p className="count">
+            posts:{" "}
+            {postsData?.[name]?.posts?.length + postsData?.[name]?.gifs?.length}
+          </p>
           <button
             className="google-search"
             onClick={() => open("https://www.google.com/search?q=" + name)}
@@ -77,17 +126,45 @@ export default function Profile() {
       </div>
 
       {/* <Section
-        data={profileData}
-        setData={setProfileData}
+        data={postsData}
+        setData={setPostsData}
         howToLoadData={howToLoadData}
         type_="profile"
       /> */}
-      <ProfileView
-        data={profileData}
-        setData={setProfileData}
-        howToLoadData={howToLoadData}
-        type_="profile"
-      />
+      <div className="switch-bar" ref={switchBarRef}>
+        <p
+          className={!showGifs ? "selected" : ""}
+          onClick={() => setShowGifs(false)}
+        >
+          <BsGrid3X3 className={"icon grid"} />
+        </p>
+        <p
+          className={showGifs ? "selected" : ""}
+          onClick={() => setShowGifs(true)}
+        >
+          <BiMoviePlay className={"icon video"} />
+        </p>
+      </div>
+
+      {!showGifs ? (
+        <ProfileView
+          data={postsData?.[name]?.posts}
+          setData={setPostsData}
+          howToLoadData={howToLoadData}
+          type_="profile"
+          data_type={"posts"}
+          name={name}
+        />
+      ) : (
+        <ProfileView
+          data={postsData?.[name]?.gifs}
+          setData={setPostsData}
+          howToLoadData={howToLoadData}
+          type_="profile"
+          data_type="gifs"
+          name={name}
+        />
+      )}
     </div>
   );
 }
