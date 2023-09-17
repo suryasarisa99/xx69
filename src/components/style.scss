@@ -1197,6 +1197,9 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5px;
+  filter: blur(3px gray);
+
+  // position: relative;
 
   .img-box {
     aspect-ratio: 1 / 1.25;
@@ -1262,6 +1265,65 @@ body {
   }
 }
 
+#overlay {
+  .big-img {
+    position: absolute;
+    width: 70%;
+    left: 50%;
+    top: 50px;
+    translate: -50%;
+
+    img {
+      width: 100%;
+    }
+  }
+  .cross-btn {
+    position: absolute;
+    left: 50%;
+    translate: -50%;
+    bottom: 18px;
+  }
+  .cross-icon {
+    font-size: 62px;
+    color: rgba(208, 208, 208, 0.876);
+    filter: drop-shadow(0px 0px 10px 10px rgba(41, 41, 41, 0.709));
+  }
+}
+
+.simple-carousel {
+  scroll-snap-type: x mandatory;
+  overflow: auto;
+  width: 100%;
+  display: flex;
+  position: absolute;
+  top: 15px;
+  left: 0;
+  scrollbar-width: 0px;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  .img-box {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+
+    width: 100vw;
+    flex-shrink: 0;
+    min-height: 500px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 85%;
+      flex-shrink: 0;
+      object-fit: cover;
+      border-radius: 15px;
+      // box-shadow: 15px 10px 65px 10px rgba(45, 45, 45, 0.587);
+    }
+  }
+}
+
 @media (min-width: 400px) {
   .x.section .carousel img {
   }
@@ -1282,5 +1344,20 @@ body {
 @media screen and (min-width: 650px) {
   .profile-view {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+  .simple-carousel {
+    gap: 14px;
+    justify-content: center;
+    .img-box {
+      height: 95vh;
+      // min-width: 450px;
+      flex-shrink: 0;
+      width: auto;
+
+      img {
+        width: auto;
+        height: 100%;
+      }
+    }
   }
 }
