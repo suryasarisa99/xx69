@@ -55,6 +55,11 @@ export default function ProfileView({
       if (e.key == "Escape") closeOverlay();
     };
     document.addEventListener("keydown", closeOverlayOnEscap);
+
+    return () => {
+      document.removeEventListener("keydown", closeOverlayOnEscap);
+      closeOverlay();
+    };
   }, []);
 
   useEffect(() => {
