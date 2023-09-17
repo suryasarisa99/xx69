@@ -15,6 +15,8 @@ import Sigin from "./pages/Sigin";
 import Signup from "./pages/Signup";
 import Verify from "./pages/Verify";
 import Verification from "./pages/Verification";
+import Posts2 from "./components/Posts2";
+import ProfileView from "./components/ProfileView";
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
       <Route path="/verify" element={<Verify />} />
       <Route path="/verification/:id" element={<Verification />} />
       <Route path="/profile/:name" element={<Profile />} />
+      <Route path="/post/:index" element={<Posts2 />} />
+      {/* <Route path="/post/:index" element={<Section />} /> */}
     </Routes>
   );
 }

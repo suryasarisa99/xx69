@@ -1,7 +1,7 @@
-import { useEffect, useContext, useState, useRef } from "react";
+import { useEffect, useContext, useState, useRef, useReducer } from "react";
 import Carousel1 from "../components/Carousel1";
 import Carousel2 from "../components/Carousel2";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { DataContext } from "../context/DataContext";
 import useCarousel from "../../hooks/useCarousel";
 import Share from "../components/Share";
@@ -13,14 +13,12 @@ import LoadingCard from "../components/LoadingCard";
 import _throttle from "lodash/throttle";
 import ProfileCard from "../components/ProfileCard";
 export default function Section({
-  data,
   setData,
   howToLoadData,
   type_,
   setMiniSearchBar,
 }) {
-  howToLoadData.total = data.length;
-  const { handleCarouselSwipe, setTotal } = useCarousel(howToLoadData);
+  // const { handleCarouselSwipe, setTotal } = useCarousel(howToLoadData);
   const {
     scrollPos,
     carouselsLoaded,
@@ -30,6 +28,8 @@ export default function Section({
     profile,
     postsData,
   } = useContext(DataContext);
+  // howToLoadData.total = postsData.length;
+
   // const [finalData, setFinalData] = useState([]);
   const [share, setShare] = useState(false);
   const [suggestions, setSuggestions] = useState(false);
@@ -42,12 +42,58 @@ export default function Section({
   const prevScrollPos = useRef(null);
   const sectionRef = useRef(null);
   const cleanupRef = useRef(null);
+  const postRef = useRef(null);
+  const { index } = useParams();
+
+  // useEffect(() => {
+  //   if (!data) {
+  //     setData(setData);
+  //   }
+  // });
+  function reducer(state, action) {
+    return { ...state, [action.type]: action.payload };
+  }
+  const [Index, dispatchIndex] = useReducer(reducer, {
+    start: +index - 3,
+    end: +index + 3,
+  });
+
+  function handleCarousel(index) {
+    let beg = Index.start;
+    if (Index.end - (beg + +index) <= 1) {
+      dispatchIndex({
+        type: "end",
+        payload: Math.min(Index.end + 5, postsData.length),
+      });
+    } else if (index <= 2 && index > 0) {
+      console.log("Worked");
+      if (index == 0) return;
+      dispatchIndex({
+        type: "start",
+        payload: Index.start - 5 <= 0 ? 0 : Index.start - 5,
+      });
+    }
+  }
 
   useEffect(() => {
-    if (!data) {
-      setData(setData);
-    }
-  });
+    console.log(postsData.slice(Index.start, Index.end));
+    console.log(postsData.slice(Index.start, Index.end).length);
+    console.log(`start: ${Index.start} || end: ${Index.end}`);
+  }, [Index]);
+
+  useEffect(() => {
+    document.getElementById(postsData[index]?._id).scrollIntoView();
+    // setTimeout(() => {
+    // document.getElementById(postsData[index]?._id).scrollIntoView();
+    // }, 1);
+  }, [index, postsData]);
+
+  useEffect(() => {
+    // console.log(postRef.current);
+    setTimeout(() => {
+      postRef.current?.scrollIntoView();
+    }, [1000]);
+  }, [postRef]);
 
   const showShare = (obj) => {
     openOverlay();
@@ -113,8 +159,8 @@ export default function Section({
     setSuggestions(false);
     foreCloseOverlay();
     let index = -1;
-    for (let i = 0; i < data.length; i++) {
-      if (data[i]._id == id) {
+    for (let i = 0; i < postsData.length; i++) {
+      if (postsData[i]._id == id) {
         index = i;
         break;
       }
@@ -126,13 +172,13 @@ export default function Section({
       })
       .then((res) => console.log(res));
 
-    data[index].name = name;
-    setData([...data]);
+    postsData[index].name = name;
+    setData([...postsData]);
   }
 
   useEffect(() => {
-    setTotal(data.length);
-  }, [data]);
+    // setTotal(data.length);
+  }, [postsData]);
 
   // For Persistant Scroll
   useEffect(() => {
@@ -206,16 +252,17 @@ export default function Section({
       })
     );
   }
-  console.log(data);
   return (
     <div className="x section">
-      {/* {toggles.devMode && (
-        <p className="temp">loaded carousels: {carouselsLoaded[type_]}</p>
-      )} */}
+      {toggles.devMode && (
+        <p className="temp">
+          start: {Index.start} || end: {Index.end}
+        </p>
+      )}
       <div className="section-carousels" ref={sectionRef}>
-        {data?.slice(0, carouselsLoaded[type_]).map((item, index) => (
+        {postsData?.slice(Index.start, Index.end)?.map((item, Pindex) => (
           <Post
-            key={index}
+            key={item._id}
             type_={type_}
             onShare={showShare}
             showSuggestions={showSuggestions}
@@ -224,20 +271,13 @@ export default function Section({
             addLike={addLike}
             removeLike={removeLike}
             item={item}
-            cIndex={index}
-            onSwipe={() => {
-              handleCarouselSwipe(index);
-
-              if (type_ != "home" || data.length - 1 - index > 8) return;
-
-              getAxios(`data`, { id: profile._id }).then((res) => {
-                console.log(res.data);
-                setData((prvData) => [...prvData, ...res.data]);
-              });
-            }}
+            cIndex={Pindex}
+            ref={Pindex == +index ? postRef : null}
+            surya={Pindex == +index ? postRef : null}
+            onSwipe={() => _throttle(handleCarousel(Pindex), 1400)}
           />
         ))}
-        {data.length == 0 && (
+        {postsData.length == 0 && (
           <>
             <LoadingCard />
             <LoadingCard />

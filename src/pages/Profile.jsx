@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Section from "./Section";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import axios from "axios";
+import ProfileView from "../components/ProfileView";
 
 export default function Profile() {
   const { name } = useParams();
@@ -75,7 +76,13 @@ export default function Profile() {
         </div>
       </div>
 
-      <Section
+      {/* <Section
+        data={profileData}
+        setData={setProfileData}
+        howToLoadData={howToLoadData}
+        type_="profile"
+      /> */}
+      <ProfileView
         data={profileData}
         setData={setProfileData}
         howToLoadData={howToLoadData}

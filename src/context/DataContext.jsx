@@ -18,6 +18,7 @@ export default function DataProvider({ children }) {
   const [data, setData] = useState([]);
   const [actress, setActress] = useState([]);
   const [profileImgs, setProfileImgs] = useState([]);
+  const [postsData, setPostsData] = useState([]);
 
   const accFuseRef = useRef(null);
   const navigate = useNavigate();
@@ -208,6 +209,8 @@ export default function DataProvider({ children }) {
         setActress,
         profileImgs,
         setProfileImgs,
+        postsData,
+        setPostsData,
       }}
     >
       {children}

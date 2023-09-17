@@ -20,6 +20,8 @@ export default function Post({
   showSuggestions,
   item,
   showProfile,
+  ref,
+  surya,
 }) {
   const { getAxios, toggles, profileImgs } = useContext(DataContext);
   let [smallScreen, setSmallScreen] = useState(false);
@@ -141,7 +143,7 @@ export default function Post({
     smallScreen,
   };
   return (
-    <div className="post">
+    <div className="post" id={id} ref={surya}>
       <div className="top-profile-bar">
         <div className="pink-border">
           <div className="img-box">
