@@ -130,7 +130,7 @@ export default function DataProvider({ children }) {
           setProfile(res.data.profile);
           setActress(res.data.actress);
           console.log(res.data.actress);
-          // getAllImgs(res.data.actress);
+          getAllImgs(res.data.actress);
           setTimeout(() => {
             console.log("<== started Fetch ==>");
             fetchOtherData(res.data.profile._id);
