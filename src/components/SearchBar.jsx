@@ -4,12 +4,15 @@ import { DataContext } from "../context/DataContext";
 import SearchResults from "./SearchResults";
 import { AnimatePresence, motion } from "framer-motion";
 import { IoMdRefresh } from "react-icons/io";
+import { specialData } from "./specialData";
+
 export default function SearchBar({ type_ }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [showResults, setShowResults] = useState(false);
   const [typeState, setTypeState] = useState("");
   const [query, setQuery] = useState("");
+
   const {
     scrollPos,
     dispatch,
@@ -18,6 +21,7 @@ export default function SearchBar({ type_ }) {
     setData,
     profile,
     getAxios,
+    setHomeSubType,
   } = useContext(DataContext);
   useEffect(() => {}, [location.pathname]);
 
@@ -29,6 +33,7 @@ export default function SearchBar({ type_ }) {
 
   const handleLBtn = (route) => {
     setData([]);
+    route = route == "home" ? "" : route;
     document
       .querySelector(".section-carousels")
       .scrollTo({ top: 0, behavior: "instant" });
@@ -55,6 +60,7 @@ export default function SearchBar({ type_ }) {
       dispatch({ type: type_, payload: sec?.scrollTop });
     navigate(`/search/${type_}/${result}`);
   }
+
   return (
     <div className="top-search-bar">
       <form action="" className="search-bar" onSubmit={handleSearch}>
@@ -81,7 +87,7 @@ export default function SearchBar({ type_ }) {
           >
             <motion.div
               className="refresh-btn-cover"
-              onClick={() => handleLBtn(" ")}
+              onClick={() => handleLBtn("home")}
               whileTap={{ rotate: 270, scale: 1.8 }}
             >
               <IoMdRefresh className="refresh-btn" />
@@ -91,6 +97,16 @@ export default function SearchBar({ type_ }) {
             </div>
             <div className="l-btn" onClick={() => handleLBtn("higest-likes")}>
               HighestLikes
+            </div>
+            <div
+              className="l-btn"
+              onClick={() => {
+                setHomeSubType("special");
+                setData([]);
+                setTimeout(() => setData(specialData), 10);
+              }}
+            >
+              specials
             </div>
             {toggles.devMode && (
               <>

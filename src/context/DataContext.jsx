@@ -18,6 +18,7 @@ export default function DataProvider({ children }) {
   const [data, setData] = useState([]);
   const [actress, setActress] = useState([]);
   const [profileImgs, setProfileImgs] = useState([]);
+  const [homeSubType, setHomeSubType] = useState("home");
   const [postsData, setPostsData] = useState({});
 
   const accFuseRef = useRef(null);
@@ -144,6 +145,7 @@ export default function DataProvider({ children }) {
 
   function getAxios(url, body) {
     if (body) return axios.post(`${import.meta.env.VITE_SERVER}/${url}`, body);
+
     return axios.get(`${import.meta.env.VITE_SERVER}/${url}`, body);
   }
   function shuffleArray(array) {
@@ -216,6 +218,8 @@ export default function DataProvider({ children }) {
         setProfileImgs,
         postsData,
         setPostsData,
+        homeSubType,
+        setHomeSubType,
       }}
     >
       {children}

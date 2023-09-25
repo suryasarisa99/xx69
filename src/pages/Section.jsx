@@ -29,6 +29,8 @@ export default function Section({
     toggles,
     profile,
     postsData,
+    homeSubType,
+    setHomeSubType,
   } = useContext(DataContext);
   // const [finalData, setFinalData] = useState([]);
   const [share, setShare] = useState(false);
@@ -229,6 +231,7 @@ export default function Section({
               handleCarouselSwipe(index);
 
               if (type_ != "home" || data.length - 1 - index > 8) return;
+              if (type_ == "home" && homeSubType !== "home") return;
 
               getAxios(`data`, { id: profile._id }).then((res) => {
                 console.log(res.data);
