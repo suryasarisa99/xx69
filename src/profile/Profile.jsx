@@ -77,7 +77,7 @@ export default function Profile() {
 
   useEffect(() => {
     const handleScroll = (e) => {
-      if (scrollY >= 18) {
+      if (scrollY >= 186) {
         switchBarRef?.current?.classList?.add("fixed-bar");
       } else if (scrollY < 186)
         switchBarRef?.current?.classList?.remove("fixed-bar");
