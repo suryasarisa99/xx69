@@ -9,6 +9,9 @@ import About from "./About";
 export default function Settings() {
   const { toggles } = useContext(DataContext);
   const navigate = useNavigate();
+  useEffect(() => {
+    scrollTo({ top: 0, behavior: "instant" });
+  }, []);
   return (
     <div className="settings">
       <About />
