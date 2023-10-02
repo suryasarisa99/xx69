@@ -6,6 +6,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import storage from "../../firebaseConfig.js";
 import actressx from "../../actress.json";
 let DataContext = createContext();
+import { auth } from "../../firebaseConfig.js";
 
 export default function DataProvider({ children }) {
   const [signin, setSignin] = useState(false);
@@ -20,6 +21,7 @@ export default function DataProvider({ children }) {
   const [profileImgs, setProfileImgs] = useState([]);
   const [homeSubType, setHomeSubType] = useState("home");
   const [postsData, setPostsData] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
   const [blur, setBlur] = useState(true);
 
   const accFuseRef = useRef(null);
@@ -83,9 +85,22 @@ export default function DataProvider({ children }) {
       });
     }
   }, [signin]);
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      setCurrentUser(user);
+      if (user) {
+        getData(user.uid);
+      } else navigate("/test");
+      console.log("xxx user xxxx");
+      console.log(user);
+    });
+  }, [auth]);
+
   useEffect(() => {
     // navigate("/signin");
-    checkLoginStatus();
+    // checkLoginStatus();
+    // getData();
   }, []);
 
   // const { x } = useFetching();
@@ -112,6 +127,23 @@ export default function DataProvider({ children }) {
         setProfiles(res.data);
       });
     }
+  }
+
+  function getData(id) {
+    getAxios("auth/my-data", { uid: id }).then((res) => {
+      if (res.data?.status) {
+        setSignin(true);
+        setData(res.data.data);
+        // setProfile(res.data.profile);
+        setActress(res.data.actress);
+        console.log(res.data.actress);
+        getAllImgs(res.data.actress);
+        setTimeout(() => {
+          console.log("<== started Fetch ==>");
+          fetchOtherData(id);
+        }, 800);
+      }
+    });
   }
 
   function checkLoginStatus() {
@@ -222,6 +254,8 @@ export default function DataProvider({ children }) {
         setPostsData,
         homeSubType,
         setHomeSubType,
+        currentUser,
+        setCurrentUser,
       }}
     >
       {children}

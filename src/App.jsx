@@ -35,7 +35,7 @@ function App() {
       <Route path="/large/:id" element={<LargeCarousel />} />
       <Route path="/clear" element={<Clear />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/signin" element={<Sigin />} />
+      <Route path="/signin" element={<GoogleAuth />} />
       <Route path="/verify" element={<Verify />} />
       <Route path="/verification/:id" element={<Verification />} />
       <Route path="/profile/:name/:type/:index" element={<ProfileSection />} />

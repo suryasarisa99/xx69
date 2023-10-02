@@ -11,6 +11,7 @@ export default function Saved({ setShowBars }) {
     profile,
     fetching,
     setSavedIds,
+    currentUser,
   } = useContext(DataContext);
   const [finalData, setFinalData] = useState([]);
 
@@ -26,7 +27,7 @@ export default function Saved({ setShowBars }) {
     if (saved.length == 0 && profile && fetching.current.saved == 0) {
       fetching.current.saved = 1;
       console.log("fetching saved - from saved");
-      getAxios("data/saved", { id: profile._id }).then((res) => {
+      getAxios("data/saved", { id: currentUser.uid }).then((res) => {
         fetching.current.saved = 2;
         console.log(res.data);
         setSaved(res.data);
