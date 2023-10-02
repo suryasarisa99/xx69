@@ -20,7 +20,7 @@ export const specialData = [
     images: [anila1, anila2],
     likes: "99k",
     likeStatus: true,
-    id: 0,
+    id: 0,  
   },
   {
     name: "Nikhil",

@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { DataContext } from "../context/DataContext";
-import "./style.scss";
+// import "./style.scss";
 import _throttle from "lodash/throttle";
 import { motion, AnimatePresence } from "framer-motion";
 import Carousel1 from "./Carousel1";
 import Carousel2 from "./Carousel2";
-import PostBottom from "./PostBottom";
+import PostBottom from "../post/PostBottom";
 import storage from "../../firebaseConfig.js";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import useProfileImg from "../../hooks/useProfileImg";

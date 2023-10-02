@@ -5,7 +5,7 @@ import { FaHeart } from "react-icons/fa";
 import { BsShareFill, BsArrowsFullscreen } from "react-icons/bs";
 import LoadingImg from "./LoadingImg";
 import { motion } from "framer-motion";
-import "./style.scss";
+// import "./style.scss";
 export default function Carousel({
   p: { item, id, selected, setSelected, len, smallScreen },
   onSwipe,

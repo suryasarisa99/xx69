@@ -2,9 +2,9 @@ import { useState, useContext, useRef, useEffect } from "react";
 import { DataContext } from "../context/DataContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { GrGrid } from "react-icons/gr";
-import Section from "./Section";
+import Section from "../pages/Section";
 import axios from "axios";
-import ProfileView from "../components/ProfileView";
+import ProfileView from "./ProfileView";
 import { BiMoviePlay } from "react-icons/bi";
 import { BsGrid3X3, BsArrowLeft } from "react-icons/bs";
 import { MdVerified } from "react-icons/md";
@@ -23,6 +23,10 @@ export default function Profile() {
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [showGifs, setShowGifs] = useState(false);
   const switchBarRef = useRef(null);
+  const postsViewRef = useRef(null);
+  const gifsViewRef = useRef(null);
+  const profileScrollRef = useRef(null);
+
   // const [postsData, setPostsData] = useState([]);
 
   useEffect(() => {
@@ -73,12 +77,14 @@ export default function Profile() {
 
   useEffect(() => {
     const handleScroll = (e) => {
-      if (scrollY >= 186) {
+      if (scrollY >= 18) {
         switchBarRef?.current?.classList?.add("fixed-bar");
       } else if (scrollY < 186)
         switchBarRef?.current?.classList?.remove("fixed-bar");
     };
     window.addEventListener("scroll", handleScroll);
+    // profileScrollRef.current?.addEventListener("scroll", sample);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -93,6 +99,53 @@ export default function Profile() {
     type_: "profile",
     total: postsData.length,
   };
+
+  const ProfileViewOfPosts = (
+    <ProfileView
+      data={postsData?.[name]?.posts}
+      setData={setPostsData}
+      howToLoadData={howToLoadData}
+      type_="profile"
+      data_type={"posts"}
+      name={name}
+      viewRef={postsViewRef}
+    />
+  );
+
+  const ProfileViewOfGifs = (
+    <ProfileView
+      data={postsData?.[name]?.gifs}
+      setData={setPostsData}
+      howToLoadData={howToLoadData}
+      type_="profile"
+      data_type="gifs"
+      name={name}
+      viewRef={gifsViewRef}
+    />
+  );
+
+  function sample() {
+    // console.log("$$$$$$$$$$$$$$$$");
+    const scrollCon = profileScrollRef.current;
+    const scrollItems = scrollCon?.querySelectorAll(".profile-scroll-item");
+    // console.log(scrollItems.length);
+    for (let i = 0; i < scrollItems.length; i++) {
+      const item = scrollItems[i];
+      let condition = parseInt(
+        Math.abs(
+          item.getBoundingClientRect().left -
+            scrollCon.getBoundingClientRect().left
+        )
+      );
+      let thresold = parseInt(item.offsetWidth / 2);
+      console.log(`condition: ${condition} || thresold: ${thresold}`);
+      if (condition <= thresold && condition >= -10) {
+        if (i == 0) setShowGifs(false);
+        else setShowGifs(true);
+        break;
+      }
+    }
+  }
 
   return (
     <div className="profile">
@@ -134,36 +187,39 @@ export default function Profile() {
       <div className="switch-bar" ref={switchBarRef}>
         <p
           className={!showGifs ? "selected" : ""}
-          onClick={() => setShowGifs(false)}
+          onClick={() => {
+            setShowGifs(false);
+
+            // document
+            //   .querySelector(".profile-scroll")
+            //   .scrollBy({ left: -400, behavior: "smooth" });
+          }}
         >
           <BsGrid3X3 className={"icon grid"} />
         </p>
         <p
           className={showGifs ? "selected" : ""}
-          onClick={() => setShowGifs(true)}
+          onClick={() => {
+            setShowGifs(true);
+            // document
+            //   .querySelector(".profile-scroll")
+            //   .scrollBy({ left: 400, behavior: "smooth" });
+          }}
         >
           <BiMoviePlay className={"icon video"} />
         </p>
       </div>
 
+      {/* {
+        <div className="profile-scroll" ref={profileScrollRef}>
+          <div className="profile-scroll-item">{ProfileViewOfPosts}</div>
+          <div className="profile-scroll-item">{ProfileViewOfGifs}</div>
+        </div>
+      } */}
       {!showGifs ? (
-        <ProfileView
-          data={postsData?.[name]?.posts}
-          setData={setPostsData}
-          howToLoadData={howToLoadData}
-          type_="profile"
-          data_type={"posts"}
-          name={name}
-        />
+        <div>{ProfileViewOfPosts}</div>
       ) : (
-        <ProfileView
-          data={postsData?.[name]?.gifs}
-          setData={setPostsData}
-          howToLoadData={howToLoadData}
-          type_="profile"
-          data_type="gifs"
-          name={name}
-        />
+        <div>{ProfileViewOfGifs}</div>
       )}
     </div>
   );

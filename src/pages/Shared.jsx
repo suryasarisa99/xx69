@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { DataContext } from "../context/DataContext";
 import { useParams } from "react-router-dom";
-import Carousel1 from "../components/Carousel1";
-import Carousel2 from "../components/Carousel2";
+import Carousel1 from "../post/Carousel1";
+import Carousel2 from "../post/Carousel2";
 
 export default function Shared() {
   const { isCarousel2, getAxios } = useContext(DataContext);

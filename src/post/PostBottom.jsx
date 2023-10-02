@@ -3,7 +3,7 @@ import { DataContext } from "../context/DataContext";
 import { FaRegBookmark, FaBookmark, FaHeart, FaRegHeart } from "react-icons/fa";
 import { RxEnterFullScreen, RxExitFullScreen } from "react-icons/rx";
 import { BsShareFill } from "react-icons/bs";
-import "./style.scss";
+// import "./style.scss";
 import _throttle from "lodash/throttle";
 import { motion, AnimatePresence } from "framer-motion";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";

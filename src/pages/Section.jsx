@@ -1,15 +1,15 @@
 import { useEffect, useContext, useState, useRef } from "react";
-import Carousel1 from "../components/Carousel1";
-import Carousel2 from "../components/Carousel2";
+import Carousel1 from "../post/Carousel1";
+import Carousel2 from "../post/Carousel2";
 import { useNavigate } from "react-router-dom";
 import { DataContext } from "../context/DataContext";
 import useCarousel from "../../hooks/useCarousel";
 import Share from "../components/Share";
 import { createPortal } from "react-dom";
 import Suggest from "../components/Suggest";
-import Post from "../components/Post";
+import Post from "../post/Post";
 import axios from "axios";
-import LoadingCard from "../components/LoadingCard";
+import LoadingCard from "../post/LoadingCard";
 import _throttle from "lodash/throttle";
 import ProfileCard from "../components/ProfileCard";
 export default function Section({
@@ -93,7 +93,7 @@ export default function Section({
       // setMiniSearchBar?.(currentScrollPos < prevScrollPos.current);
     }
     prevScrollPos.current = currentScrollPos;
-  }, 80);
+  }, 150);
 
   function showSuggestions({ title, id, img }) {
     openOverlay();

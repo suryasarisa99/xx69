@@ -3,7 +3,6 @@ import { DataContext } from "../context/DataContext";
 import { useNavigate } from "react-router-dom";
 import Switch from "../components/Switch";
 import { GrLinkNext } from "react-icons/gr";
-import Suggest from "../components/Suggest";
 
 export default function Settings() {
   const { toggles } = useContext(DataContext);
@@ -38,6 +37,7 @@ export default function Settings() {
         <Toggle state="persistantScroll"> Persistant scroll</Toggle>
         <Toggle state="fuzzySearch"> Fuzzy Search</Toggle>
         <Toggle state="devMode">Dev Mode</Toggle>
+        <Toggle state="blur">Blur Images</Toggle>
       </Group>
 
       <div className="section">

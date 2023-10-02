@@ -20,6 +20,7 @@ export default function DataProvider({ children }) {
   const [profileImgs, setProfileImgs] = useState([]);
   const [homeSubType, setHomeSubType] = useState("home");
   const [postsData, setPostsData] = useState({});
+  const [blur, setBlur] = useState(true);
 
   const accFuseRef = useRef(null);
   const navigate = useNavigate();
@@ -46,6 +47,7 @@ export default function DataProvider({ children }) {
     isCarousel2: createTg("isCarousel2", true),
     fuzzySearch: createTg("fuzzySearch", true),
     devMode: createTg("devMode", false),
+    blur: createTg("blur", true),
   });
   // ScrollPos Reducer
   const [scrollPos, dispatch] = useReducer(reducer, {

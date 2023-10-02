@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { DataContext } from "../context/DataContext";
 import { FaHeart } from "react-icons/fa";
-import "./style.scss";
+import "../components/style.scss";
 import _throttle from "lodash/throttle";
 import { motion } from "framer-motion";
 import LoadingImg from "./LoadingImg";
@@ -23,7 +23,6 @@ export default function Carousel({
   let [images, setImages] = useState(
     toggles.reverseOrder ? [...item.images].reverse() : item.images
   );
-  const [file, setFile] = useState(null);
   useEffect(() => {
     imgConRef.current?.addEventListener("scroll", updateDotOnScroll);
     // imgConRef.current?.addEventListener("scroll", _throttle(test, 1));
@@ -82,7 +81,10 @@ export default function Carousel({
                   src={image}
                   alt={item?.name || item?.title || "x-img"}
                   onDoubleClick={handleBigHeart}
-                  style={{ objectFit: smallScreen ? "contain" : "cover" }}
+                  style={{
+                    objectFit: smallScreen ? "contain" : "cover",
+                    filter: toggles.blur ? "blur(18px)" : "none",
+                  }}
                 ></motion.img>
               ) : (
                 <LoadingImg name={item.name} index={cIndex} />
@@ -119,7 +121,6 @@ export default function Carousel({
           </div>
         )}
       </div>
-      {file && <img src={file} alt="x" />}
     </div>
   );
 }

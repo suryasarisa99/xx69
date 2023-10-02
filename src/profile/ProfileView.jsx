@@ -11,9 +11,16 @@ export default function ProfileView({
   howToLoadData,
   type_,
   data_type,
+  viewRef,
 }) {
-  const { setPostsData, carouselsLoaded, dispatchLoaded, postsData } =
-    useContext(DataContext);
+  const {
+    setPostsData,
+    carouselsLoaded,
+    dispatchLoaded,
+    postsData,
+    toggles,
+    blur,
+  } = useContext(DataContext);
   const navigate = useNavigate();
   const [loaded, setLoaded] = useState(carouselsLoaded.profile?.[name] || 0);
   const [isLoading, setIsLoading] = useState(true);
@@ -87,10 +94,11 @@ export default function ProfileView({
   const timerRef = useRef(null);
 
   return (
-    <div className="profile-view">
+    <div className="profile-view" ref={viewRef}>
       {postsData?.[name]?.[data_type]?.slice(0, loaded)?.map((item, index) => (
         <div
           key={item._id}
+          className={"img-box " + data_type}
           onClick={(e) => {
             setTimeout(() => {
               if (!dblClick.current) {
@@ -106,18 +114,22 @@ export default function ProfileView({
             setBigImg(item);
           }}
         >
-          <div className={"img-box " + data_type}>
-            <img
-              src={item.images[0]}
-              key={"img-" + item._id}
-              alt={`Image ${index}`}
-            />
-          </div>
+          {/* <div> */}
+          <img
+            style={{
+              filter: toggles.blur ? `blur(8px)` : `none`,
+              // filter: "blur(8px)",
+            }}
+            src={item.images[0]}
+            key={"img-" + item._id}
+            alt={`Image ${index}`}
+          />
+          {/* </div> */}
         </div>
       ))}
       {longPress &&
         createPortal(
-          <div>
+          <>
             <div className="simple-carousel">
               {bigImg.images.map((img) => {
                 return (
@@ -131,7 +143,7 @@ export default function ProfileView({
             <div className="cross-btn" onClick={closeOverlay}>
               <AiFillCloseCircle className="cross-icon" />
             </div>
-          </div>,
+          </>,
           document.getElementById("overlay")
         )}
 

@@ -1,4 +1,4 @@
-import Admin from "./Admin";
+import Admin from "../auth/Admin";
 import { Outlet } from "react-router-dom";
 import { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate, Routes, Route, useLocation } from "react-router-dom";
@@ -11,7 +11,7 @@ import { DataContext } from "../context/DataContext";
 import Home from "./Home";
 import SearchResults from "../components/SearchResults";
 import SideNav from "../components/SideNav";
-import Profiles from "./Profiles";
+import Profiles from "../profile/Profiles";
 import { motion, AnimatePresence } from "framer-motion";
 export default function X() {
   const navigate = useNavigate();
@@ -79,7 +79,7 @@ export default function X() {
             animate={{ y: 0 }}
             exit={{ y: 30 }}
             // exit={{ opacity: !showBars ? 0 : 100 }}
-            transition={{ ease: "easeInOut", duration: 0.3 }}
+            transition={{ ease: "easeInOut", duration: 0.2 }}
           >
             <BottomNav />
           </motion.div>

@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import Unlock from "./pages/Unlock";
-import Admin from "./pages/Admin";
-import Section from "./components/Section";
-import Sudo from "./pages/Sudo";
+import Unlock from "./auth/Unlock";
+import Admin from "./auth/Admin";
+// import Section from "./components/Section";
+import Sudo from "./auth/Sudo";
 import X from "./pages/X";
 import Settings from "./pages/Settings";
 import Search from "./pages/Search";
@@ -10,13 +10,14 @@ import Share from "./components/Share";
 import Shared from "./pages/Shared";
 import LargeCarousel from "./components/LargeCarousel";
 import Clear from "./pages/Clear";
-import Profile from "./pages/Profile";
-import Sigin from "./pages/Sigin";
-import Signup from "./pages/Signup";
-import Verify from "./pages/Verify";
-import Verification from "./pages/Verification";
-import Posts2 from "./components/Posts2";
-import ProfileView from "./components/ProfileView";
+import Profile from "./profile/Profile";
+import Sigin from "./auth/Sigin";
+import Signup from "./auth/Signup";
+import Verify from "./auth/Verify";
+import Verification from "./auth/Verification";
+import ProfileSection from "./profile/ProfileSection";
+import ProfileView from "./profile/ProfileView";
+import GoogleAuth from "./auth/GoogleAuth";
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
       <Route path="/x/*" element={<X />} />
       <Route path="/login" element={<Unlock />} />
       <Route path="/admin" element={<Admin />} />
-      <Route path="/section/:selected" element={<Section />} />
+      {/* <Route path="/section/:selected" element={<Section />} /> */}
       <Route path="/sudo" element={<Sudo />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/search/:selected/:query" element={<Search />} />
@@ -37,8 +38,9 @@ function App() {
       <Route path="/signin" element={<Sigin />} />
       <Route path="/verify" element={<Verify />} />
       <Route path="/verification/:id" element={<Verification />} />
-      <Route path="/profile/:name/:type/:index" element={<Posts2 />} />
+      <Route path="/profile/:name/:type/:index" element={<ProfileSection />} />
       <Route path="/profile/:name" element={<Profile />} />
+      <Route path="/test" element={<GoogleAuth />} />
     </Routes>
   );
 }
