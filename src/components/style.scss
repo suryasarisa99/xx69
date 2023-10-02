@@ -1208,9 +1208,13 @@ body {
 // grid-template-rows: repeat(4, 1fr);
 
 .profile-view {
+  min-height: 95vh;
+  justify-content: center;
+  align-content: start;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5px;
+  align-items: start;
   filter: blur(3px gray);
 
   // position: relative;
