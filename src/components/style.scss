@@ -613,6 +613,13 @@ body {
         font-size: 22px;
       }
     }
+    .signout {
+      background-color: rgb(0, 132, 255);
+      border: none;
+      font-size: 20px;
+      width: fit-content;
+      margin: 15px;
+    }
     .link {
       // background-color: green;
       display: flex;
@@ -652,6 +659,11 @@ body {
     justify-content: space-between;
     .icon {
       font-size: 22px;
+    }
+    .current-user-icon {
+      width: 30px;
+      border-radius: 50%;
+      // height: 30px;ss
     }
   }
 }

@@ -3,17 +3,23 @@ import { DataContext } from "../context/DataContext";
 import Section from "./Section";
 
 export default function Videos({ setShowBars }) {
-  const { gifs, setGifs, carouselsLoaded, dispatchLoaded, getAxios, profile } =
-    useContext(DataContext);
+  const {
+    gifs,
+    setGifs,
+    carouselsLoaded,
+    dispatchLoaded,
+    getAxios,
+    currentUser,
+  } = useContext(DataContext);
   const [finalData, setFinalData] = useState([]);
 
   useEffect(() => {
-    if (gifs.length == 0 && profile) {
-      getAxios("data/gifs", { id: profile._id }).then((res) =>
+    if (gifs.length == 0 && currentUser) {
+      getAxios("data/gifs", { id: currentUser.uid }).then((res) =>
         setGifs(res.data)
       );
     }
-  }, [profile]);
+  }, [currentUser]);
 
   const howToLoadData = {
     initial: 2,

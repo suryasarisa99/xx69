@@ -19,7 +19,7 @@ export default function PostBottom({
   likeRef,
 }) {
   const {
-    profile,
+    currentUser,
     profiles,
     setSaved,
     getAxios,
@@ -35,13 +35,13 @@ export default function PostBottom({
   const addBookMark = (e) => {
     e.stopPropagation();
     setIsSaved(true);
-    getAxios("data/save", { id: profile._id, savedId: id });
+    getAxios("data/save", { id: currentUser.uid, savedId: id });
     setSaved((prv) => [...prv, item]);
     setSavedIds((prv) => [...prv, id]);
   };
   const removeBookMark = (e) => {
     e.stopPropagation();
-    getAxios("data/unsave", { id: profile._id, savedId: id });
+    getAxios("data/unsave", { id: currentUser.uid, savedId: id });
     setIsSaved(false);
     setSaved((prv) => prv.filter((s) => s._id != id));
     setSavedIds((prv) => prv.filter((sid) => sid != id));
@@ -82,7 +82,10 @@ export default function PostBottom({
               <FaHeart
                 className="heart heart-fill"
                 onClick={() => {
-                  getAxios("data/unlike", { itemId: id, accId: profile._id });
+                  getAxios("data/unlike", {
+                    itemId: id,
+                    accId: currentUser.uid,
+                  });
                   setLike(false);
                   setLikesCount((prv) => prv - 1);
                   removeLike(id); // to change in data
@@ -92,7 +95,7 @@ export default function PostBottom({
               <div
                 ref={likeRef}
                 onClick={() => {
-                  getAxios("data/like", { itemId: id, accId: profile._id });
+                  getAxios("data/like", { itemId: id, accId: currentUser.uid });
                   setLike(true);
                   setLikesCount((prv) => prv + 1);
                   addLike(id); // to change in data

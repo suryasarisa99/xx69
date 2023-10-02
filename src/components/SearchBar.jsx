@@ -19,7 +19,7 @@ export default function SearchBar({ type_ }) {
     toggles,
     dispatchLoaded,
     setData,
-    profile,
+    currentUser,
     getAxios,
     setHomeSubType,
   } = useContext(DataContext);
@@ -38,7 +38,7 @@ export default function SearchBar({ type_ }) {
       .querySelector(".section-carousels")
       .scrollTo({ top: 0, behavior: "instant" });
     dispatchLoaded({ type: "home", payload: 5 });
-    getAxios(`data/${route}`, { id: profile._id }).then((res) => {
+    getAxios(`data/${route}`, { id: currentUser.uid }).then((res) => {
       // console.log(res.data);
       setData(res.data);
     });

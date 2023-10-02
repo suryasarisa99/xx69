@@ -27,7 +27,7 @@ export default function Section({
     setShowBars,
     getAxios,
     toggles,
-    profile,
+    currentUser,
     postsData,
     homeSubType,
     setHomeSubType,
@@ -233,7 +233,7 @@ export default function Section({
               if (type_ != "home" || data.length - 1 - index > 8) return;
               if (type_ == "home" && homeSubType !== "home") return;
 
-              getAxios(`data`, { id: profile._id }).then((res) => {
+              getAxios(`data`, { id: currentUser.uid }).then((res) => {
                 console.log(res.data);
                 setData((prvData) => [...prvData, ...res.data]);
               });

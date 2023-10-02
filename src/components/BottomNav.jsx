@@ -1,7 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import { DataContext } from "../context/DataContext";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaBookmark, FaFire, FaRegBookmark } from "react-icons/fa";
+import {
+  FaBookmark,
+  FaFire,
+  FaRegBookmark,
+  FaUser,
+  FaRegUser,
+} from "react-icons/fa";
 import { BsGear, BsGearFill, BsPlayBtn, BsPlayBtnFill } from "react-icons/bs";
 import {
   AiFillHome,
@@ -11,7 +17,7 @@ import {
 } from "react-icons/ai";
 
 export default function BottomNav() {
-  const { scrollPos, dispatch } = useContext(DataContext);
+  const { scrollPos, dispatch, currentUser } = useContext(DataContext);
   const location = useLocation();
   const navigate = useNavigate();
   const [previousPathname, setPreviousPathname] = useState("");
@@ -71,8 +77,19 @@ export default function BottomNav() {
       : AiOutlineHome;
   const Videos = location.pathname == "/x/videos" ? BsPlayBtnFill : BsPlayBtn;
   const Saved = location.pathname == "/x/saved" ? FaBookmark : FaRegBookmark;
-  const Settings = location.pathname == "/x/settings" ? BsGearFill : BsGear;
+  // const Settings = location.pathname == "/x/settings" ? BsGearFill : BsGear;
+  const Settings = location.pathname == "/x/settings" ? FaUser : FaRegUser;
   const Fire = location.pathname == "/x/profiles" ? AiFillFire : AiOutlineFire;
+  const [photo, setPhoto] = useState();
+  useEffect(() => {
+    if (!photo) {
+      let img = new Image();
+      img.src = currentUser.photoURL;
+      img.onload = () => {
+        setPhoto(currentUser.photoURL);
+      };
+    }
+  }, [currentUser]);
   return (
     <div className="bottom-nav">
       {/* <p>{location.pathname}</p> */}
@@ -90,7 +107,11 @@ export default function BottomNav() {
           <Saved className="icon" />
         </button>
         <button onClick={goSettings}>
-          <Settings className="icon" />
+          {photo ? (
+            <img className="current-user-icon" src={photo} />
+          ) : (
+            <Settings className="icon" />
+          )}
         </button>
       </div>
     </div>

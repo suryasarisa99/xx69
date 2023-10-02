@@ -18,6 +18,7 @@ import Verification from "./auth/Verification";
 import ProfileSection from "./profile/ProfileSection";
 import ProfileView from "./profile/ProfileView";
 import GoogleAuth from "./auth/GoogleAuth";
+import About from "./pages/About";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
       <Route path="/profile/:name/:type/:index" element={<ProfileSection />} />
       <Route path="/profile/:name" element={<Profile />} />
       <Route path="/test" element={<GoogleAuth />} />
+      <Route path="/about" element={<About />} />
     </Routes>
   );
 }

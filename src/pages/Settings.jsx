@@ -3,12 +3,15 @@ import { DataContext } from "../context/DataContext";
 import { useNavigate } from "react-router-dom";
 import Switch from "../components/Switch";
 import { GrLinkNext } from "react-icons/gr";
-
+import { auth } from "../../firebaseConfig";
+import { signOut } from "firebase/auth";
+import About from "./About";
 export default function Settings() {
   const { toggles } = useContext(DataContext);
   const navigate = useNavigate();
   return (
     <div className="settings">
+      <About />
       <h1>Settings</h1>
 
       <Group title="Carousel">
@@ -51,6 +54,11 @@ export default function Settings() {
           </i>
         </div>
       </div>
+      <center>
+        <button className="signout" onClick={() => signOut(auth)}>
+          Signout
+        </button>
+      </center>
     </div>
   );
 }

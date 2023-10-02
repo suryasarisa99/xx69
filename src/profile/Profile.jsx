@@ -13,7 +13,7 @@ export default function Profile() {
   const {
     carouselsLoaded,
     dispatchLoaded,
-    profile,
+    currentUser,
     actress,
     profileImg,
     postsData,
@@ -30,7 +30,7 @@ export default function Profile() {
   // const [postsData, setPostsData] = useState([]);
 
   useEffect(() => {
-    if (!profile) return;
+    if (!currentUser) return;
     if (postsData[name]) {
       const actor = actress.find((item) => item._id == name);
 
@@ -51,7 +51,7 @@ export default function Profile() {
         await axios.post(
           `${import.meta.env.VITE_SERVER}/data/profile/${name}`,
           {
-            id: profile._id,
+            id: currentUser.uid,
           }
         )
       ).data;
@@ -73,7 +73,7 @@ export default function Profile() {
     }
     fetchData();
     dispatchLoaded({ type: "profile", payload: 2 });
-  }, [name, profile]);
+  }, [name, currentUser]);
 
   useEffect(() => {
     const handleScroll = (e) => {

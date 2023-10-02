@@ -16,8 +16,14 @@ export default function Search({ type_ }) {
   const [showBars, setShowBars] = useState(true);
   const [showResults, setShowResults] = useState(false);
   const prevScrollPos = useRef(null);
-  const { profile, saved, carouselsLoaded, dispatchLoaded, getAxios, toggles } =
-    useContext(DataContext);
+  const {
+    currentUser,
+    saved,
+    carouselsLoaded,
+    dispatchLoaded,
+    getAxios,
+    toggles,
+  } = useContext(DataContext);
 
   let [filteredData, setFilterData] = useState([]);
 
@@ -66,19 +72,21 @@ export default function Search({ type_ }) {
 
   useEffect(() => {
     dispatchLoaded({ type: "search", payload: 4 });
-    if (profile == null) return;
+    if (currentUser == null) return;
     if (toggles.fuzzySearch) {
       let home = ["/x/home" || "/x" || "/"];
       if (selected == "home") {
         let fdata = fuse.current.search(query).map((item) => item.item._id);
         if (toggles.devMode) {
-          getAxios("data/dev-search", { ids: fdata, accId: profile._id }).then(
-            (res) => setFilterData(res.data)
-          );
+          getAxios("data/dev-search", {
+            ids: fdata,
+            accId: currentUser.uid,
+          }).then((res) => setFilterData(res.data));
         } else {
-          getAxios("data/f-search", { ids: fdata, accId: profile._id }).then(
-            (res) => setFilterData(res.data)
-          );
+          getAxios("data/f-search", {
+            ids: fdata,
+            accId: currentUser.uid,
+          }).then((res) => setFilterData(res.data));
         }
       } else if (selected == "saved") {
         let savedFuse = new Fuse(saved, {
@@ -92,17 +100,17 @@ export default function Search({ type_ }) {
       }
 
       // setFilterData(shuffleSearchResults ? shuffleArray(fdata) : fdata);
-    } else if (query != "" && profile) {
+    } else if (query != "" && currentUser) {
       setFilterData([]);
       if (selected == "home") {
         axios
           .post(`${import.meta.env.VITE_SERVER}/data/search/${finalQuery}`, {
-            id: profile._id,
+            id: currentUser.uid,
           })
           .then((res) => setFilterData(res.data));
       }
     }
-  }, [finalQuery, profile]);
+  }, [finalQuery, currentUser]);
 
   const handleScroll = () => {
     const currentScrollPos = window.scrollY;
