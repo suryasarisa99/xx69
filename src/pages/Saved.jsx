@@ -35,7 +35,7 @@ export default function Saved({ setShowBars }) {
         setSavedIds(res.data.map((s) => s._id));
       });
     }
-  }, [profile, fetching]);
+  }, [currentUser, fetching]);
 
   useEffect(() => {
     setFinalData(saved);

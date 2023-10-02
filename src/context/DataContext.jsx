@@ -91,7 +91,7 @@ export default function DataProvider({ children }) {
       setCurrentUser(user);
       if (user) {
         getData(user.uid);
-      } else navigate("/test");
+      } else navigate("/signin");
       console.log("xxx user xxxx");
       console.log(user);
     });

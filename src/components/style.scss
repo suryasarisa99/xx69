@@ -663,7 +663,9 @@ body {
     .current-user-icon {
       width: 30px;
       border-radius: 50%;
-      // height: 30px;ss
+      height: 30px;
+      object-fit: cover;
+      background-color: red;
     }
   }
 }
